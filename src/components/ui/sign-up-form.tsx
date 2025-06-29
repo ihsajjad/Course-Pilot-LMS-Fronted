@@ -34,7 +34,7 @@ export function SignupForm() {
       <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-200">
         Create an Account
       </h2>
-      <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
+      <p className="mt-2 max-w-sm text-sm text-foreground-600">
         Join <span className="text-primary font-medium">Course Pilot</span> and
         start your learning journey today.
       </p>
