@@ -28,7 +28,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="relative w-full">
+    <div className="sticky top-0 w-full">
       <ShadNavbar>
         {/* Desktop Navigation */}
         <NavBody>
@@ -36,7 +36,10 @@ export function Navbar() {
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
             <ModeToggle />
-            <NavbarButton variant="secondary">Login</NavbarButton>
+
+            <NavbarButton variant="secondary" href="/login">
+              Login
+            </NavbarButton>
           </div>
         </NavBody>
 
@@ -69,6 +72,7 @@ export function Navbar() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
+                href="/login"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
