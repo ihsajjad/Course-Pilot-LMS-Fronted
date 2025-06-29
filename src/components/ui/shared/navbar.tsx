@@ -37,8 +37,8 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             <ModeToggle />
 
-            <NavbarButton variant="secondary" href="/login">
-              Login
+            <NavbarButton variant="secondary" href="/sign-in">
+              Sign in
             </NavbarButton>
           </div>
         </NavBody>
@@ -72,12 +72,12 @@ export function Navbar() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
-                href="/login"
+                href="/sign-in"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
               >
-                Login
+                Sign in
               </NavbarButton>
             </div>
           </MobileNavMenu>

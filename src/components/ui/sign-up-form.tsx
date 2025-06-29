@@ -1,13 +1,15 @@
 "use client";
-import { cn } from "@/lib/utils";
-import React from "react";
+import { useSignUpMutation } from "@/lib/redux/api";
+import { cn, errorToast, successToast } from "@/lib/utils";
+import { LoaderCircle } from "lucide-react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Button } from "./button";
 import InputError from "./input-error";
-import { error } from "console";
 
-interface SignUpFormType {
+export interface SignUpFormType {
   name: string;
   email: string;
   password: string;
@@ -16,6 +18,7 @@ interface SignUpFormType {
 }
 
 export function SignupForm() {
+  const [globalError, setGlobalError] = useState<string>("");
   const {
     register,
     handleSubmit,
@@ -23,8 +26,24 @@ export function SignupForm() {
     watch,
   } = useForm<SignUpFormType>();
 
-  const onSubmit = handleSubmit((data: SignUpFormType) => {
-    console.log("Form submitted", data);
+  const [signUpUser, { isLoading }] = useSignUpMutation();
+
+  const onSubmit = handleSubmit(async (data: SignUpFormType) => {
+    setGlobalError("");
+
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("profile", data.profile[0]);
+
+    const res = await signUpUser(formData);
+    if (res.data?.success) {
+      successToast("Registration successfull");
+    } else {
+      errorToast(res?.data?.message as string);
+      setGlobalError(res?.data?.message as string);
+    }
   });
 
   const currentPass = watch("password");
@@ -39,7 +58,7 @@ export function SignupForm() {
         start your learning journey today.
       </p>
 
-      <form className="my-8" onSubmit={onSubmit}>
+      <form className="my-8" onSubmit={onSubmit} encType="multipart/form-data">
         <LabelInputContainer className="mb-4">
           <Label htmlFor="firstname">Full Name</Label>
           <Input
@@ -117,14 +136,22 @@ export function SignupForm() {
             <InputError msg={errors.profile.message as string} />
           )}
         </LabelInputContainer>
+        {globalError && (
+          <p className="text-destructive text-sm mb-2 text-center font-semibold">
+            {globalError}
+          </p>
+        )}
 
-        <button
-          className="group/btn relative block h-10 w-full rounded-md bg-primary font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+        <Button
+          className="group/btn relative h-10 w-full rounded-md bg-primary font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
           type="submit"
+          color={"primary"}
+          disabled={isLoading}
         >
-          Sign up &rarr;
+          {isLoading && <LoaderCircle className="w-6 h-6 animate-spin " />}
+          {isLoading ? "Loading..." : "Sign up →"}
           <BottomGradient />
-        </button>
+        </Button>
 
         {/* Footer Text */}
         <p className="text-center text-sm text-muted-foreground mt-3">

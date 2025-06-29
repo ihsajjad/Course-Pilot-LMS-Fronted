@@ -21,6 +21,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import { api } from "./api";
+import { ToastContainer } from "react-toastify";
 
 /* REDUX PERSISTENCE */
 const createNoopStorage = () => {

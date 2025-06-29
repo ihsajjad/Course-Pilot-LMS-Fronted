@@ -1,3 +1,4 @@
+import { SignUpFormType } from "@/components/ui/sign-up-form";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../redux/index";
 
@@ -23,7 +24,15 @@ export const api = createApi({
   }),
   reducerPath: "api",
   tagTypes: [],
-  endpoints: (builder) => ({}),
+  endpoints: (builder) => ({
+    signUp: builder.mutation<ApiResponse, FormData>({
+      query: (formData) => ({
+        url: "/api/user/register",
+        method: "POST",
+        body: formData,
+      }),
+    }),
+  }),
 });
 
-export const {} = api;
+export const {useSignUpMutation} = api;
