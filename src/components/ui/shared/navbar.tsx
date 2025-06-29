@@ -28,7 +28,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="sticky top-0 w-full">
+    <div className="sticky top-0 z-50 w-full">
       <ShadNavbar>
         {/* Desktop Navigation */}
         <NavBody>
