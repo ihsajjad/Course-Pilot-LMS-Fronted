@@ -3,7 +3,7 @@ import StoreProvider from "@/lib/redux";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { NavbarDemo } from "@/components/ui/shared/navbar";
+import { Navbar } from "@/components/ui/shared/navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +37,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <NavbarDemo />
+            <Navbar />
             {children}
           </ThemeProvider>
         </StoreProvider>

@@ -4,17 +4,16 @@ import {
   MobileNavHeader,
   MobileNavMenu,
   MobileNavToggle,
-  Navbar,
   NavbarButton,
   NavbarLogo,
   NavBody,
   NavItems,
+  Navbar as ShadNavbar,
 } from "@/components/ui/resizable-navbar";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
 import { useState } from "react";
+import ModeToggle from "../mode-toggle";
 
-export function NavbarDemo() {
+export function Navbar() {
   const navItems = [
     {
       name: "Home",
@@ -27,27 +26,16 @@ export function NavbarDemo() {
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const isDark = theme === "dark";
 
   return (
     <div className="relative w-full">
-      <Navbar>
+      <ShadNavbar>
         {/* Desktop Navigation */}
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => setTheme(isDark ? "light" : "dark")}
-              className="relative flex h-6 w-6 items-center justify-center rounded-full bg-foreground-50 transition-colors duration-300"
-            >
-              {isDark ? (
-                <Sun className="h-5 w-5 text-yellow-500" />
-              ) : (
-                <Moon className="h-5 w-5 text-foreground" />
-              )}
-            </button>
+            <ModeToggle />
             <NavbarButton variant="secondary">Login</NavbarButton>
           </div>
         </NavBody>
@@ -56,10 +44,13 @@ export function NavbarDemo() {
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
-            <MobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
+            <div className="flex items-center justify-end gap-3">
+              <ModeToggle />
+              <MobileNavToggle
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              />
+            </div>
           </MobileNavHeader>
 
           <MobileNavMenu
@@ -87,9 +78,7 @@ export function NavbarDemo() {
             </div>
           </MobileNavMenu>
         </MobileNav>
-      </Navbar>
-
-      {/* Navbar */}
+      </ShadNavbar>
     </div>
   );
 }
