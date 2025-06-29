@@ -1,6 +1,7 @@
 import { SignUpFormType } from "@/components/ui/sign-up-form";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../redux/index";
+import { SignInFormType } from "@/components/ui/sign-in-form";
 
 // Union type for either a successful response or a Zod validation error
 export type ApiResponse = {
@@ -32,7 +33,15 @@ export const api = createApi({
         body: formData,
       }),
     }),
+
+    signIn: builder.mutation<ApiResponse, SignInFormType>({
+      query: (loginData) => ({
+        url: "/api/user/login",
+        method: "POST",
+        body: loginData,
+      }),
+    }),
   }),
 });
 
-export const {useSignUpMutation} = api;
+export const { useSignUpMutation, useSignInMutation } = api;

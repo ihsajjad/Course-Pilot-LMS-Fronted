@@ -1,12 +1,15 @@
 "use client";
-import { cn } from "@/lib/utils";
-import React from "react";
+import { cn, errorToast, successToast } from "@/lib/utils";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import InputError from "./input-error";
+import { useSignInMutation } from "@/lib/redux/api";
+import { Button } from "./button";
+import { LoaderCircle } from "lucide-react";
 
-interface SignInType {
+export interface SignInFormType {
   email: string;
   password: string;
 }
@@ -16,10 +19,19 @@ export function SignInForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignInType>();
+  } = useForm<SignInFormType>();
+  const [globalError, setGlobalError] = useState<string>("");
+  const [signIn, { isLoading }] = useSignInMutation();
 
-  const onSubmit = handleSubmit((data: SignInType) => {
-    console.log("Form submitted", data);
+  const onSubmit = handleSubmit(async (data: SignInFormType) => {
+    setGlobalError("");
+    const res = await signIn(data);
+    if (res.data?.success) {
+      successToast(res.data?.message);
+    } else {
+      errorToast(res?.data?.message as string);
+      setGlobalError(res?.data?.message as string);
+    }
   });
 
   return (
@@ -50,7 +62,12 @@ export function SignInForm() {
             id="password"
             placeholder="••••••••"
             type="password"
-            {...register("password", { required: "Invalid password" })}
+            {...register("password", {
+              validate: (val) => {
+                if (val.length < 6)
+                  return "Password must be at least 6 characters";
+              },
+            })}
             isError={!!errors.password}
           />
           {errors.password && (
@@ -58,13 +75,22 @@ export function SignInForm() {
           )}
         </LabelInputContainer>
 
-        <button
-          className="group/btn relative block h-10 w-full rounded-md bg-primary font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+        {globalError && (
+          <p className="text-destructive text-sm mb-2 text-center font-semibold">
+            {globalError}
+          </p>
+        )}
+
+        <Button
+          className="group/btn relative h-10 w-full rounded-md bg-primary font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
           type="submit"
+          color={"primary"}
+          disabled={isLoading}
         >
-          Sign in &rarr;
+          {isLoading && <LoaderCircle className="w-6 h-6 animate-spin " />}
+          {isLoading ? "Loading..." : "Sign in →"}
           <BottomGradient />
-        </button>
+        </Button>
 
         {/* Footer Text */}
         <p className="text-center text-sm text-muted-foreground mt-3">

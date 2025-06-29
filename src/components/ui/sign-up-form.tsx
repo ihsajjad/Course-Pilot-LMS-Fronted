@@ -39,7 +39,7 @@ export function SignupForm() {
 
     const res = await signUpUser(formData);
     if (res.data?.success) {
-      successToast("Registration successfull");
+      successToast(res.data?.message);
     } else {
       errorToast(res?.data?.message as string);
       setGlobalError(res?.data?.message as string);
