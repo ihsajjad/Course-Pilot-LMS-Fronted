@@ -9,13 +9,15 @@ import InputError from "./input-error";
 import { Button } from "./button";
 import BottomGradient from "./bottom-gradient";
 import { Textarea } from "./textarea";
+import { useCreateCourseMutation } from "@/lib/redux/api";
+import { errorToast, successToast } from "@/lib/utils";
 
 interface AddCourseModal {
   openModal: boolean;
   handleCloseModal: () => void;
 }
 
-interface CourseFormType {
+export interface CourseFormType {
   title: string;
   description: string;
   price: number;
@@ -24,7 +26,7 @@ interface CourseFormType {
 
 const AddCourseModal = ({ openModal, handleCloseModal }: AddCourseModal) => {
   const [globalError, setGlobalError] = useState<string>("");
-
+  const [createCourse, { isLoading }] = useCreateCourseMutation();
   const {
     register,
     handleSubmit,
@@ -33,16 +35,24 @@ const AddCourseModal = ({ openModal, handleCloseModal }: AddCourseModal) => {
 
   const onSubmit = handleSubmit(async (data: CourseFormType) => {
     setGlobalError("");
-    console.log(data);
+
     // converting data into form data to send to the server because it has a file
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("price", data.price.toString());
     formData.append("thumbnail", data.thumbnail[0]);
+
+    const res = await createCourse(formData);
+    if (res.data?.success) {
+      successToast(res.data?.message);
+      handleCloseModal();
+    } else {
+      errorToast(res?.data?.message as string);
+      setGlobalError(res?.data?.message as string);
+    }
   });
 
-  const isLoading = false;
   return (
     <div
       className={`inset-0 p-3 ${

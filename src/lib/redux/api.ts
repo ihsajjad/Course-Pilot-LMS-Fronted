@@ -1,6 +1,6 @@
 import { SignInFormType } from "@/components/ui/sign-in-form";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CurrentUser } from "../types";
+import { CourseContentType, CurrentUser } from "../types";
 
 // Union type for either a successful response or a Zod validation error
 export type ApiResponse = {
@@ -43,8 +43,24 @@ export const api = createApi({
     signOutUser: builder.mutation<ApiResponse, void>({
       query: () => ({ url: "/auth/logout", method: "POST" }),
     }),
+
+    createCourse: builder.mutation<
+      ApiResponse & { data: CourseContentType },
+      FormData
+    >({
+      query: (formData) => ({
+        url: "/courses/create",
+        method: "POST",
+        body: formData,
+      }),
+    }),
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useCurrentUserQuery, useSignOutUserMutation } =
-  api;
+export const {
+  useSignUpMutation,
+  useSignInMutation,
+  useCurrentUserQuery,
+  useSignOutUserMutation,
+  useCreateCourseMutation
+} = api;
