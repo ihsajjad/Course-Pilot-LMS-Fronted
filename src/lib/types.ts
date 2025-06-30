@@ -74,3 +74,8 @@ export type GetCoursesType = {
     pages: number;
   };
 };
+
+export type CourseQueryType = {
+  text: string;
+  sortByPrice: "price HtoL" | "price LtoH";
+};
