@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased relative h-full`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased relative h-full max-w-7xl mx-auto`}
       >
         <StoreProvider>
           <ThemeProvider
