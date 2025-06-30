@@ -58,7 +58,7 @@ export type ModuleType = {
 };
 
 export type CourseContentType = {
-  courseId: string;
+  _id: string;
   title: string; // Course title
   description: string; // Full course description
   price: number; // e.g. 499.00

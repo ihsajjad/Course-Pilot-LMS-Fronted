@@ -1,14 +1,14 @@
 "use client";
 import {
-  MobileNav,
-  MobileNavHeader,
-  MobileNavMenu,
-  MobileNavToggle,
-  NavbarButton,
-  NavbarLogo,
-  NavBody,
-  NavItems,
-  Navbar as ShadNavbar,
+    MobileNav,
+    MobileNavHeader,
+    MobileNavMenu,
+    MobileNavToggle,
+    NavbarButton,
+    NavbarLogo,
+    NavBody,
+    NavItems,
+    Navbar as ShadNavbar,
 } from "@/components/ui/resizable-navbar";
 import { useAppDispatch, useAppSelector } from "@/lib/redux";
 import { useSignOutUserMutation } from "@/lib/redux/api";
@@ -16,16 +16,16 @@ import { clearUser } from "@/lib/redux/features/authSlice";
 import { errorToast, successToast } from "@/lib/utils";
 import Image from "next/image";
 import { useState } from "react";
-import { Button } from "../button";
+import { Button } from "../ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../dropdown-menu";
-import ModeToggle from "../mode-toggle";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import ModeToggle from "../ui/mode-toggle";
 
 export function Navbar() {
   const { user } = useAppSelector((state) => state.authSlice);

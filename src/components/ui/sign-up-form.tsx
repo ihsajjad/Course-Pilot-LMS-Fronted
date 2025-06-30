@@ -1,15 +1,17 @@
 "use client";
+import { useAppDispatch } from "@/lib/redux";
 import { useSignUpMutation } from "@/lib/redux/api";
-import { cn, errorToast, successToast } from "@/lib/utils";
+import { setUser } from "@/lib/redux/features/authSlice";
+import { errorToast, successToast } from "@/lib/utils";
 import { LoaderCircle } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import BottomGradient from "./bottom-gradient";
 import { Button } from "./button";
 import InputError from "./input-error";
-import { useAppDispatch } from "@/lib/redux";
-import { setUser } from "@/lib/redux/features/authSlice";
+import LabelInputContainer from "./label-input-container";
 
 export interface SignUpFormType {
   name: string;
@@ -34,6 +36,7 @@ export function SignupForm() {
   const onSubmit = handleSubmit(async (data: SignUpFormType) => {
     setGlobalError("");
 
+    // converting data into form data to send to the server because it has a file
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("email", data.email);
@@ -172,26 +175,3 @@ export function SignupForm() {
     </div>
   );
 }
-
-const BottomGradient = () => {
-  return (
-    <>
-      <span className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
-      <span className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
-    </>
-  );
-};
-
-const LabelInputContainer = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => {
-  return (
-    <div className={cn("flex w-full flex-col space-y-2", className)}>
-      {children}
-    </div>
-  );
-};
