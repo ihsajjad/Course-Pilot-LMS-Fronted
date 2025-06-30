@@ -12,8 +12,12 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
 import ModeToggle from "../mode-toggle";
+import { useAppSelector } from "@/lib/redux";
 
 export function Navbar() {
+  const { user } = useAppSelector((state) => state.authSlice);
+  console.log(user);
+
   const navItems = [
     {
       name: "Home",

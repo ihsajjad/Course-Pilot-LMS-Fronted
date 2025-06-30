@@ -21,7 +21,9 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import { api } from "./api";
-import { ToastContainer } from "react-toastify";
+
+/*IMPORTING SLICESES*/
+import authSlice from "./features/authSlice";
 
 /* REDUX PERSISTENCE */
 const createNoopStorage = () => {
@@ -50,11 +52,16 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  // globalSlice: globalReducer,
+  authSlice,
   [api.reducerPath]: api.reducer,
 });
 
-const persistedReducer = persistReducer<any, any>(persistConfig, rootReducer);
+// const persistedReducer = persistReducer<any, any>(persistConfig, rootReducer);
+
+const persistedReducer = persistReducer<ReturnType<typeof rootReducer>>(
+  persistConfig,
+  rootReducer
+);
 
 /* REDUX STORE */
 export const makeStore = () => {
