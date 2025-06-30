@@ -4,23 +4,26 @@ import AddCourseModal from "@/components/ui/add-course-modal";
 import { Button } from "@/components/ui/button";
 import CourseCard from "@/components/ui/course-card";
 import CourseQueries from "@/components/ui/course-queries";
+import CoursesPagination from "@/components/ui/courses-pagination";
 import { useGetCoursesQuery } from "@/lib/redux/api";
 import { CourseQueryType } from "@/lib/types";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
 const AllCourses = () => {
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [query, setQuery] = useState<CourseQueryType>({
     text: "",
     sortByPrice: "price LtoH",
+    page: 1,
   });
-  const [openModal, setOpenModal] = useState<boolean>(false);
+
   const { data } = useGetCoursesQuery(query);
 
   const handleCloseModal = () => setOpenModal(false);
   const handleOpenModal = () => setOpenModal(true);
   return (
-    <div className="min-h-screen p-4 pb-20 sm:px-10 lg:px-20 font-[family-name:var(--font-geist-sans)] relative">
+    <div className="min-h-screen p-4 sm:px-10 lg:px-20 font-[family-name:var(--font-geist-sans)] relative">
       <div className="flex items-center justify-between border-b border-foreground/30 pb-2">
         <h1 className="text-2xl md:text-3xl font-semibold text-muted-foreground">
           📚 Manage All Courses
@@ -45,6 +48,13 @@ const AllCourses = () => {
           <CourseCard key={course._id} course={course} />
         ))}
       </div>
+
+      {/* pagination */}
+      <CoursesPagination
+        page={query.page}
+        pages={data?.pagination.pages || 1}
+        setQuery={setQuery}
+      />
 
       {/* Add Course Modal */}
       <AddCourseModal

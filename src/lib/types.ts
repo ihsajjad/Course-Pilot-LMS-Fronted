@@ -78,4 +78,5 @@ export type GetCoursesType = {
 export type CourseQueryType = {
   text: string;
   sortByPrice: "price HtoL" | "price LtoH";
+  page: number;
 };

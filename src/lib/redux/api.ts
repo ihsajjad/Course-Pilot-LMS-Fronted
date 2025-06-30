@@ -62,8 +62,8 @@ export const api = createApi({
     }),
 
     getCourses: builder.query<GetCoursesType, CourseQueryType>({
-      query: ({ text, sortByPrice }: CourseQueryType) =>
-        `/courses?text=${text}&sortByPrice=${sortByPrice}`,
+      query: ({ text, sortByPrice, page }: CourseQueryType) =>
+        `/courses?text=${text}&sortByPrice=${sortByPrice}&page=${page}`,
       providesTags: ["Courses"],
     }),
   }),
