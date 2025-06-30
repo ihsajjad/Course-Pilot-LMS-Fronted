@@ -2,13 +2,15 @@
 
 import AddCourseModal from "@/components/ui/add-course-modal";
 import { Button } from "@/components/ui/button";
+import CourseCard from "@/components/ui/course-card";
 import { useGetCoursesQuery } from "@/lib/redux/api";
 import { Plus } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
 const AllCourses = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const { data } = useGetCoursesQuery({text: "", sortByPrice: "price HtoL"});
+  const { data } = useGetCoursesQuery({ text: "", sortByPrice: "price LtoH" });
 
   const handleCloseModal = () => setOpenModal(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -29,9 +31,9 @@ const AllCourses = () => {
         </Button>
       </div>
 
-      <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10">
         {data?.courses.map((course) => (
-          <div key={course._id}>{course.title}</div>
+          <CourseCard key={course._id} course={course} />
         ))}
       </div>
 

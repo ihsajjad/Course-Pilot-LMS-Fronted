@@ -57,7 +57,7 @@ export type ModuleType = {
   lectures: LectureType[];
 };
 
-export type CourseContentType = {
+export type CourseType = {
   _id: string;
   title: string; // Course title
   description: string; // Full course description
@@ -67,7 +67,7 @@ export type CourseContentType = {
 };
 
 export type GetCoursesType = {
-  courses: CourseContentType[];
+  courses: CourseType[];
   pagination: {
     total: number;
     page: number;
