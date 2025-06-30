@@ -2,11 +2,13 @@
 
 import AddCourseModal from "@/components/ui/add-course-modal";
 import { Button } from "@/components/ui/button";
+import { useGetCoursesQuery } from "@/lib/redux/api";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
 const AllCourses = () => {
-  const [openModal, setOpenModal] = useState<boolean>(true);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const { data } = useGetCoursesQuery({text: "", sortByPrice: "price HtoL"});
 
   const handleCloseModal = () => setOpenModal(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -25,6 +27,12 @@ const AllCourses = () => {
           <Plus className="w-4 h-4" />
           Add Course
         </Button>
+      </div>
+
+      <div>
+        {data?.courses.map((course) => (
+          <div key={course._id}>{course.title}</div>
+        ))}
       </div>
 
       {/* Add Course Modal */}

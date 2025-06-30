@@ -65,3 +65,12 @@ export type CourseContentType = {
   thumbnail: string; // Cloudinary image URL
   modules: ModuleType[];
 };
+
+export type GetCoursesType = {
+  courses: CourseContentType[];
+  pagination: {
+    total: number;
+    page: number;
+    pages: number;
+  };
+};

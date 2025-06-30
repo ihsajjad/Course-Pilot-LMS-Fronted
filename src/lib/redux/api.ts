@@ -1,6 +1,6 @@
 import { SignInFormType } from "@/components/ui/sign-in-form";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CourseContentType, CurrentUser } from "../types";
+import { CourseContentType, CurrentUser, GetCoursesType } from "../types";
 
 // Union type for either a successful response or a Zod validation error
 export type ApiResponse = {
@@ -54,6 +54,19 @@ export const api = createApi({
         body: formData,
       }),
     }),
+
+    getCourses: builder.query<
+      GetCoursesType,
+      { text: string; sortByPrice: "price HtoL" | "price LtoH" }
+    >({
+      query: ({
+        text,
+        sortByPrice,
+      }: {
+        text: string;
+        sortByPrice: "price HtoL" | "price LtoH";
+      }) => `/courses?text=${text}&sortByPrice=${sortByPrice}`,
+    }),
   }),
 });
 
@@ -62,5 +75,6 @@ export const {
   useSignInMutation,
   useCurrentUserQuery,
   useSignOutUserMutation,
-  useCreateCourseMutation
+  useCreateCourseMutation,
+  useGetCoursesQuery,
 } = api;
