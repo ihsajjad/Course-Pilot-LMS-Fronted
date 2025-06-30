@@ -8,6 +8,8 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "./button";
 import InputError from "./input-error";
+import { useAppDispatch } from "@/lib/redux";
+import { setUser } from "@/lib/redux/features/authSlice";
 
 export interface SignUpFormType {
   name: string;
@@ -26,6 +28,7 @@ export function SignupForm() {
     watch,
   } = useForm<SignUpFormType>();
 
+  const dispatch = useAppDispatch();
   const [signUpUser, { isLoading }] = useSignUpMutation();
 
   const onSubmit = handleSubmit(async (data: SignUpFormType) => {
@@ -39,6 +42,8 @@ export function SignupForm() {
 
     const res = await signUpUser(formData);
     if (res.data?.success) {
+      // setting the corrent user after sign up
+      dispatch(setUser({ user: res.data.data, isLoading }));
       successToast(res.data?.message);
     } else {
       errorToast(res?.data?.message as string);

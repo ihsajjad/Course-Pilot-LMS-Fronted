@@ -8,6 +8,8 @@ import InputError from "./input-error";
 import { useSignInMutation } from "@/lib/redux/api";
 import { Button } from "./button";
 import { LoaderCircle } from "lucide-react";
+import { useAppDispatch } from "@/lib/redux";
+import { setUser } from "@/lib/redux/features/authSlice";
 
 export interface SignInFormType {
   email: string;
@@ -21,12 +23,16 @@ export function SignInForm() {
     formState: { errors },
   } = useForm<SignInFormType>();
   const [globalError, setGlobalError] = useState<string>("");
+
+  const dispatch = useAppDispatch();
   const [signIn, { isLoading }] = useSignInMutation();
 
   const onSubmit = handleSubmit(async (data: SignInFormType) => {
     setGlobalError("");
     const res = await signIn(data);
     if (res.data?.success) {
+      // setting the corrent user after sign in
+      dispatch(setUser({ user: res.data.data, isLoading }));
       successToast(res.data?.message);
     } else {
       errorToast(res?.data?.message as string);

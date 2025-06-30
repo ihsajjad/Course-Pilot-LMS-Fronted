@@ -6,6 +6,7 @@ import "./globals.css";
 import { Navbar } from "@/components/ui/shared/navbar";
 import Footer from "@/components/ui/shared/footer";
 import { ToastContainer } from "react-toastify";
+import AuthProvider from "@/components/auth-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +41,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Navbar />
-            {children}
+            <AuthProvider>{children}</AuthProvider>
             <Footer />
           </ThemeProvider>
         </StoreProvider>

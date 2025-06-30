@@ -1,7 +1,6 @@
-import { SignUpFormType } from "@/components/ui/sign-up-form";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootState } from "../redux/index";
 import { SignInFormType } from "@/components/ui/sign-in-form";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { CurrentUser } from "../types";
 
 // Union type for either a successful response or a Zod validation error
 export type ApiResponse = {
@@ -11,37 +10,37 @@ export type ApiResponse = {
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-    prepareHeaders: (headers, { getState }) => {
-      // Get the token from the Redux state
-      const token = (getState() as RootState).authSlice?.user?.token;
-
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-
-      return headers;
-    },
+    baseUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`,
+    credentials: "include",
   }),
   reducerPath: "api",
-  tagTypes: [],
+  tagTypes: ["CurrentUser"],
   endpoints: (builder) => ({
-    signUp: builder.mutation<ApiResponse, FormData>({
+    signUp: builder.mutation<ApiResponse & { data: CurrentUser }, FormData>({
       query: (formData) => ({
-        url: "/api/user/register",
+        url: "/auth/register",
         method: "POST",
         body: formData,
       }),
     }),
 
-    signIn: builder.mutation<ApiResponse, SignInFormType>({
+    signIn: builder.mutation<
+      ApiResponse & { data: CurrentUser },
+      SignInFormType
+    >({
       query: (loginData) => ({
-        url: "/api/user/login",
+        url: "/auth/login",
         method: "POST",
         body: loginData,
       }),
     }),
+
+    currentUser: builder.query<CurrentUser, void>({
+      query: () => "/auth/current",
+      providesTags: ["CurrentUser"],
+    }),
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation } = api;
+export const { useSignUpMutation, useSignInMutation, useCurrentUserQuery } =
+  api;
