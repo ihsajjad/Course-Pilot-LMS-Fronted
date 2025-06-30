@@ -10,20 +10,28 @@ import {
   NavItems,
   Navbar as ShadNavbar,
 } from "@/components/ui/resizable-navbar";
-import { useAppSelector } from "@/lib/redux";
+import { useAppDispatch, useAppSelector } from "@/lib/redux";
+import { useSignOutUserMutation } from "@/lib/redux/api";
+import { clearUser } from "@/lib/redux/features/authSlice";
+import { errorToast, successToast } from "@/lib/utils";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "../button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "../dropdown-menu";
 import ModeToggle from "../mode-toggle";
 
 export function Navbar() {
   const { user } = useAppSelector((state) => state.authSlice);
+
+  const dispatch = useAppDispatch();
+  const [signOut, { isLoading }] = useSignOutUserMutation();
   console.log(user);
 
   const navItems = [
@@ -37,7 +45,6 @@ export function Navbar() {
     },
   ];
 
-  let dropdownItems: { name: string; link: string }[] = [];
   if (user?.role === "User") {
     navItems.push({ name: "My Courses", link: "/my-courses" });
   } else if (user?.role === "Admin") {
@@ -45,6 +52,16 @@ export function Navbar() {
   }
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    const res = await signOut();
+    if (res?.data?.success) {
+      dispatch(clearUser());
+      successToast(res.data.message);
+    } else {
+      errorToast("Something went wrong!");
+    }
+  };
 
   return (
     <div className="sticky top-0 z-50 w-full">
@@ -74,7 +91,19 @@ export function Navbar() {
 
                 <DropdownMenuContent side="bottom" align="end" className="w-52">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <Button variant={"outline"} size={"sm"} className="w-full">
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="font-semibold flex-col items-start">
+                    Signed as <br />{" "}
+                    <p className="-mt-3 font-normal">{user.email}</p>
+                  </DropdownMenuItem>
+
+                  <Button
+                    disabled={isLoading}
+                    variant={"outline"}
+                    size={"sm"}
+                    onClick={handleSignOut}
+                    className="w-full"
+                  >
                     Sign out
                   </Button>
                 </DropdownMenuContent>
@@ -132,7 +161,13 @@ export function Navbar() {
                     </div>
                   </div>
 
-                  <Button variant={"outline"} size={"sm"} className="w-full">
+                  <Button
+                    disabled={isLoading}
+                    variant={"outline"}
+                    size={"sm"}
+                    onClick={handleSignOut}
+                    className="w-full"
+                  >
                     Sign out
                   </Button>
                 </>

@@ -39,8 +39,12 @@ export const api = createApi({
       query: () => "/auth/current",
       providesTags: ["CurrentUser"],
     }),
+
+    signOutUser: builder.mutation<ApiResponse, void>({
+      query: () => ({ url: "/auth/logout", method: "POST" }),
+    }),
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useCurrentUserQuery } =
+export const { useSignUpMutation, useSignInMutation, useCurrentUserQuery, useSignOutUserMutation } =
   api;
