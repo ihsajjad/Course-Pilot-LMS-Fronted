@@ -46,9 +46,9 @@ export function Navbar() {
   ];
 
   if (user?.role === "User") {
-    navItems.push({ name: "My Courses", link: "/my-courses" });
+    navItems.push({ name: "My Courses", link: "/dashboard/my-courses" });
   } else if (user?.role === "Admin") {
-    navItems.push({ name: "All Courses", link: "/all-courses" });
+    navItems.push({ name: "Manage Courses", link: "/dashboard/manage-courses" });
   }
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

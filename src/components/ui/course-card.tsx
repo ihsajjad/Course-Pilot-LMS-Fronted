@@ -2,6 +2,7 @@ import { CourseType } from "@/lib/types";
 import Image from "next/image";
 import React from "react";
 import { Button } from "./button";
+import Link from "next/link";
 
 const CourseCard = ({
   course,
@@ -33,9 +34,12 @@ const CourseCard = ({
         <div className="mt-auto flex items-center justify-between">
           <span className="font-medium text-primary">৳ {course.price}</span>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">
+            <Link
+              href={`/dashboard/edit-module/${course._id}`}
+              className="border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-2 rounded-md flex items-center justify-center"
+            >
               View Details
-            </Button>
+            </Link>
             <Button size="sm" onClick={() => updateModal(course)}>
               Edit
             </Button>

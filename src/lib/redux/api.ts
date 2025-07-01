@@ -78,6 +78,10 @@ export const api = createApi({
         `/courses?text=${text}&sortByPrice=${sortByPrice}&page=${page}`,
       providesTags: ["Courses"],
     }),
+
+    getCourseById: builder.query<CourseType, string>({
+      query: (_id) => `/courses/${_id}`,
+    }),
   }),
 });
 
@@ -88,5 +92,6 @@ export const {
   useSignOutUserMutation,
   useCreateCourseMutation,
   useGetCoursesQuery,
-  useUpdateCourseMutation
+  useUpdateCourseMutation,
+  useGetCourseByIdQuery,
 } = api;
