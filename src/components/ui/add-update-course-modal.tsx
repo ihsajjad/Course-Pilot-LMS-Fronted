@@ -1,21 +1,21 @@
 "use client";
-import { LoaderCircle, X } from "lucide-react";
-import LabelInputContainer from "./label-input-container";
-import { Label } from "./label";
-import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { Input } from "./input";
-import InputError from "./input-error";
-import { Button } from "./button";
-import BottomGradient from "./bottom-gradient";
-import { Textarea } from "./textarea";
 import {
   useCreateCourseMutation,
   useUpdateCourseMutation,
 } from "@/lib/redux/api";
-import { errorToast, successToast } from "@/lib/utils";
 import { CourseType } from "@/lib/types";
+import { errorToast, successToast } from "@/lib/utils";
+import { LoaderCircle, X } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import BottomGradient from "./bottom-gradient";
+import { Button } from "./button";
+import { Input } from "./input";
+import InputError from "./input-error";
+import { Label } from "./label";
+import LabelInputContainer from "./label-input-container";
+import { Textarea } from "./textarea";
 
 interface AddCourseModalProps {
   openModal: boolean;
@@ -48,13 +48,14 @@ const AddUpdateCourseModal = ({
 
   // Reseting the course data to update
   useEffect(() => {
-    course &&
-      reset({
-        title: course.title,
-        description: course.description,
-        price: course.price,
-      });
-  }, [course]);
+    course
+      ? reset({
+          title: course.title,
+          description: course.description,
+          price: course.price,
+        })
+      : reset({ title: "", description: "", price: 0 });
+  }, [course?._id]);
 
   const onSubmit = handleSubmit(async (data: CourseFormType) => {
     setGlobalError("");
@@ -106,7 +107,7 @@ const AddUpdateCourseModal = ({
       <div className="max-w-lg w-full bg-card rounded-lg relative">
         {/* Close modal button */}
         <button
-          onClick={handleCloseModal}
+          onClick={() => handleCloseModal()}
           className="h-6 w-6 flex items-center justify-center bg-destructive text-neutral-200 absolute -top-2 -right-2 rounded-full cursor-pointer"
         >
           <X size={20} />

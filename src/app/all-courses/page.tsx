@@ -20,9 +20,19 @@ const AllCourses = () => {
   const [courseToUpdate, setCourseToUpdate] = useState<CourseType | null>(null);
   const { data } = useGetCoursesQuery(query);
 
-  const handleCloseModal = () => setOpenModal(false); // opening modal
-  const handleOpenModal = () => setOpenModal(true); // closing modal
+  // opening add course modal
+  const handleCloseModal = () => {
+    setCourseToUpdate(null);
+    setOpenModal(false);
+  };
 
+  // closing modal
+  const handleOpenModal = () => {
+    setCourseToUpdate(null);
+    setOpenModal(true);
+  };
+
+  // open modal with course dat to update
   const handleOpenUpdateModal = (course: CourseType) => {
     setCourseToUpdate(course);
     setOpenModal(true);
