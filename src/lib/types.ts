@@ -43,18 +43,16 @@ export type LectureResourceType = {
 };
 
 export type LectureType = {
-  id: string;
+  _id: string;
   title: string;
-  videoUrl: string; // YouTube embed link or streaming URL
-  resources: LectureResourceType[];
-  isLocked: boolean;
-  isCompleted: boolean;
+  videoUrl: string; 
 };
 
 export type ModuleType = {
-  id: string;
+  _id: string;
   title: string; // e.g. "Module 1: Introduction"
   lectures: LectureType[];
+  resources: LectureResourceType[];
 };
 
 export type CourseType = {
