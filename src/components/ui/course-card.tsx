@@ -3,7 +3,13 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "./button";
 
-const CourseCard = ({ course }: { course: CourseType }) => {
+const CourseCard = ({
+  course,
+  updateModal,
+}: {
+  course: CourseType;
+  updateModal: (course: CourseType) => void;
+}) => {
   return (
     <div
       key={course._id}
@@ -30,7 +36,9 @@ const CourseCard = ({ course }: { course: CourseType }) => {
             <Button variant="outline" size="sm">
               View Details
             </Button>
-            <Button size="sm">Edit</Button>
+            <Button size="sm" onClick={() => updateModal(course)}>
+              Edit
+            </Button>
           </div>
         </div>
       </div>

@@ -1,12 +1,12 @@
 "use client";
 
-import AddCourseModal from "@/components/ui/add-course-modal";
+import AddUpdateCourseModal from "@/components/ui/add-update-course-modal";
 import { Button } from "@/components/ui/button";
 import CourseCard from "@/components/ui/course-card";
 import CourseQueries from "@/components/ui/course-queries";
 import CoursesPagination from "@/components/ui/courses-pagination";
 import { useGetCoursesQuery } from "@/lib/redux/api";
-import { CourseQueryType } from "@/lib/types";
+import { CourseQueryType, CourseType } from "@/lib/types";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
@@ -17,11 +17,17 @@ const AllCourses = () => {
     sortByPrice: "price LtoH",
     page: 1,
   });
-
+  const [courseToUpdate, setCourseToUpdate] = useState<CourseType | null>(null);
   const { data } = useGetCoursesQuery(query);
 
-  const handleCloseModal = () => setOpenModal(false);
-  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false); // opening modal
+  const handleOpenModal = () => setOpenModal(true); // closing modal
+
+  const handleOpenUpdateModal = (course: CourseType) => {
+    setCourseToUpdate(course);
+    setOpenModal(true);
+  };
+
   return (
     <div className="min-h-screen p-4 sm:px-10 lg:px-20 font-[family-name:var(--font-geist-sans)] relative">
       <div className="flex items-center justify-between border-b border-foreground/30 pb-2">
@@ -45,7 +51,11 @@ const AllCourses = () => {
       {/* Course card container */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data?.courses.map((course) => (
-          <CourseCard key={course._id} course={course} />
+          <CourseCard
+            key={course._id}
+            course={course}
+            updateModal={handleOpenUpdateModal}
+          />
         ))}
       </div>
 
@@ -56,10 +66,11 @@ const AllCourses = () => {
         setQuery={setQuery}
       />
 
-      {/* Add Course Modal */}
-      <AddCourseModal
+      {/* Add or Update Course Modal */}
+      <AddUpdateCourseModal
         openModal={openModal}
         handleCloseModal={handleCloseModal}
+        course={courseToUpdate as CourseType}
       />
     </div>
   );

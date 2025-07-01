@@ -61,6 +61,18 @@ export const api = createApi({
       invalidatesTags: ["Courses"],
     }),
 
+    updateCourse: builder.mutation<
+      ApiResponse & { data: CourseType },
+      FormData
+    >({
+      query: (formData) => ({
+        url: "/courses/update",
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["Courses"],
+    }),
+
     getCourses: builder.query<GetCoursesType, CourseQueryType>({
       query: ({ text, sortByPrice, page }: CourseQueryType) =>
         `/courses?text=${text}&sortByPrice=${sortByPrice}&page=${page}`,
@@ -76,4 +88,5 @@ export const {
   useSignOutUserMutation,
   useCreateCourseMutation,
   useGetCoursesQuery,
+  useUpdateCourseMutation
 } = api;
