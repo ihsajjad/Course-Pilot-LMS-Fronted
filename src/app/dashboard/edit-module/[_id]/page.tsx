@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import CourseContent from "@/components/ui/course-content";
 import { Input } from "@/components/ui/input";
 import AddUpdateModuleModal from "@/components/ui/modals/add-update-module-modal";
+import UpdateLecturesModal from "@/components/ui/modals/update-lectures-modal";
 import { useGetCourseByIdQuery } from "@/lib/redux/api";
 import { ModuleType } from "@/lib/types";
 import { Plus } from "lucide-react";
@@ -105,6 +106,7 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
   const { data: course, isLoading } = useGetCourseByIdQuery(_id);
 
   const [openModuleModal, setOpenModuleModal] = useState(false);
+  const [openUpdateLecModal, setUpdateLecModal] = useState(false);
 
   if (isLoading) {
     return "Loading...";
@@ -127,12 +129,19 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
         <CourseContent
           modules={modules}
           setOpenModuleModal={() => setOpenModuleModal(true)}
+          setUpdateLecModal={() => setUpdateLecModal(true)}
         />
       </div>
 
       <AddUpdateModuleModal
         openModal={openModuleModal}
         handleCloseModal={() => setOpenModuleModal(false)}
+      />
+
+      <UpdateLecturesModal
+        openModal={openUpdateLecModal}
+        handleCloseModal={() => setUpdateLecModal(false)}
+        prevLectures={[...modules[0].lectures, ...modules[1].lectures]}
       />
     </div>
   );

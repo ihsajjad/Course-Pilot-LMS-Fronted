@@ -9,13 +9,17 @@ import {
 import { Button } from "./button";
 import { Input } from "./input";
 
+interface CourseContentProps {
+  modules: ModuleType[];
+  setOpenModuleModal: () => void;
+  setUpdateLecModal: () => void;
+}
+
 const CourseContent = ({
   modules,
   setOpenModuleModal,
-}: {
-  modules: ModuleType[];
-  setOpenModuleModal: () => void;
-}) => {
+  setUpdateLecModal,
+}: CourseContentProps) => {
   return (
     <div className="col-span-1 border rounded-xl p-3">
       <h4 className="text-lg font-medium text-neutral-600 dark:text-neutral-300">
@@ -60,7 +64,12 @@ const CourseContent = ({
                 <div className="italic text-muted">No lectures added yet.</div>
               )}
 
-              <Button className="gap-2 w-full" variant="secondary" size="sm">
+              <Button
+                onClick={setUpdateLecModal}
+                className="gap-2 w-full"
+                variant="secondary"
+                size="sm"
+              >
                 <Plus className="w-4 h-4" />
                 Add Lecture
               </Button>
