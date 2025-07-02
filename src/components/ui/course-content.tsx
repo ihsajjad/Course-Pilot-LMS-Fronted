@@ -1,5 +1,7 @@
+"use client";
+
 import { LectureType, ModuleType } from "@/lib/types";
-import { Edit, Plus, X } from "lucide-react";
+import { Edit, LoaderCircle, Plus, Trash2, X } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -8,6 +10,9 @@ import {
 } from "./accordion";
 import { Button } from "./button";
 import { Input } from "./input";
+import { useDeleteModuleMutation } from "@/lib/redux/api";
+import { errorToast, successToast } from "@/lib/utils";
+import { useState } from "react";
 
 interface CourseContentProps {
   modules: ModuleType[];
@@ -16,13 +21,32 @@ interface CourseContentProps {
     prevLecture: LectureType | null;
     moduleId: string;
   }) => void;
+  courseId: string;
 }
 
 const CourseContent = ({
   modules,
   handleOpenModuleModal,
   handleOpenLecModal,
+  courseId,
 }: CourseContentProps) => {
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const [deleteModule, { isLoading: isDeletingModule }] =
+    useDeleteModuleMutation();
+
+  // To delete module based on id
+  const handleDeleteModule = async (courseId: string, moduleId: string) => {
+    setDeletingId(moduleId);
+    const res = await deleteModule({ courseId, moduleId });
+    if (res.data?.success) {
+      successToast(res.data?.message);
+    } else {
+      errorToast(res?.data?.message as string);
+    }
+  };
+
+
   return (
     <div className="col-span-1 border rounded-xl p-3">
       <h4 className="text-lg font-medium text-neutral-600 dark:text-neutral-300">
@@ -47,8 +71,19 @@ const CourseContent = ({
               value={module._id}
               className="rounded-xl border border-border shadow-sm transition-all hover:shadow-md"
             >
-              <AccordionTrigger className="px-4 py-3 bg-muted hover:bg-muted/60 ">
-                {`Module ${i + 1}: ${module.title}`}
+              <AccordionTrigger className="px-4 py-3 bg-muted hover:bg-muted/60 relative">
+                {`Module ${i + 1}: ${module.title}`}{" "}
+                {/* Delete module button */}
+                <span
+                  onClick={() => handleDeleteModule(courseId, module._id)}
+                  className="bg-red-400 hover:bg-red-500 h-7 w-7 flex items-center justify-center rounded-full text-white cursor-pointer absolute top-2.5 right-12"
+                >
+                  {deletingId === module._id ? (
+                    <LoaderCircle className="w-5 h-5 animate-spin " />
+                  ) : (
+                    <Trash2 size={18} />
+                  )}
+                </span>
               </AccordionTrigger>
 
               <AccordionContent className="px-2 md:px-4 py-4 bg-background rounded-b-xl flex flex-col gap-1 text-sm text-muted-foreground">
@@ -71,16 +106,22 @@ const CourseContent = ({
                               moduleId: module._id,
                             })
                           }
-                          className="h-5 w-5 flex items-center justify-center bg-orange-500 text-neutral-200 rounded-full cursor-pointer"
+                          className="h-6 w-6 flex items-center justify-center bg-orange-500 text-neutral-200 rounded-full cursor-pointer"
                         >
                           <Edit size={12} />
                         </button>
-                        <button
-                          // onClick={() => handleRemoveResource(resource)}
-                          className="h-5 w-5 flex items-center justify-center bg-destructive text-neutral-200 rounded-full cursor-pointer"
+                        <span
+                          onClick={() =>
+                            handleDeleteModule(courseId, module._id)
+                          }
+                          className="bg-red-400 hover:bg-red-500 h-6 w-6 flex items-center justify-center rounded-full text-white cursor-pointer"
                         >
-                          <X size={12} />
-                        </button>
+                          {deletingId === module._id ? (
+                            <LoaderCircle className="w-5 h-5 animate-spin " size={15} />
+                          ) : (
+                            <Trash2 size={15} />
+                          )}
+                        </span>
                       </div>
                     </div>
                   ))

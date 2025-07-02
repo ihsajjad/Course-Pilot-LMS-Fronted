@@ -99,7 +99,7 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
   }: {
     prevLecture: LectureType | null;
     moduleId: string;
-    }) => {
+  }) => {
     setLectureModalData({ prevLecture, moduleId });
     setUpdateLecModal(true);
   };
@@ -126,6 +126,7 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
           modules={course?.modules as ModuleType[]}
           handleOpenModuleModal={handleOpenModuleModal}
           handleOpenLecModal={handleOpenLecModal}
+          courseId={_id}
         />
       </div>
 

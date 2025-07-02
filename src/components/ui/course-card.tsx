@@ -19,7 +19,7 @@ const CourseCard = ({
   const [deleteCourse, { isLoading: isDeleting }] =
     useDeleteCourseByIdMutation();
 
-  const handleDelete = async (id: string) => {
+  const handleDeleteCourse = async (id: string) => {
     const res = await deleteCourse(id);
     if (res.data?.success) {
       successToast(res.data?.message);
@@ -52,7 +52,7 @@ const CourseCard = ({
           <span className="font-medium text-primary">৳ {course.price}</span>
           <div className="flex gap-2">
             <Button
-              onClick={() => handleDelete(course._id)}
+              onClick={() => handleDeleteCourse(course._id)}
               variant={"destructive"}
               size={"sm"}
             >

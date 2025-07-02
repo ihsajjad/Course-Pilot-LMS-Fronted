@@ -90,7 +90,7 @@ export const api = createApi({
 
     deleteCourseById: builder.mutation<ApiResponse, string>({
       query: (courseId) => ({ url: `/courses/${courseId}`, method: "DELETE" }),
-      invalidatesTags: ["Courses"]
+      invalidatesTags: ["Courses"],
     }),
 
     createModule: builder.mutation<ApiResponse, CreateModuleBodyType>({
@@ -107,6 +107,17 @@ export const api = createApi({
         url: "/courses/module",
         method: "PUT",
         body: moduleData,
+      }),
+      invalidatesTags: ["Course"],
+    }),
+
+    deleteModule: builder.mutation<
+      ApiResponse,
+      { courseId: string; moduleId: string }
+    >({
+      query: ({ courseId, moduleId }) => ({
+        url: `/courses/module/${courseId}/${moduleId}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["Course"],
     }),
@@ -143,6 +154,7 @@ export const {
   useGetCourseByIdQuery,
   useCreateModuleMutation,
   useUpdateModuleMutation,
+  useDeleteModuleMutation,
   useCreateLectureMutation,
   useUpdateLectureMutation,
 } = api;
