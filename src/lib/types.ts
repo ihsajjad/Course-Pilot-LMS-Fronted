@@ -37,22 +37,18 @@ export type CurrentUser = {
 
 // types/lecture.ts
 
-export type LectureResourceType = {
-  name: string;
-  url: string; // PDF download/view link
-};
 
 export type LectureType = {
   _id: string;
   title: string;
   videoUrl: string; 
+  resources: string[];
 };
 
 export type ModuleType = {
   _id: string;
   title: string; // e.g. "Module 1: Introduction"
   lectures: LectureType[];
-  resources: LectureResourceType[];
 };
 
 export type CourseType = {

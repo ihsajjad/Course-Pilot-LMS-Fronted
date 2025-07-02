@@ -1,6 +1,6 @@
 import { ModuleType } from "@/lib/types";
 import { LoaderCircle, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import BottomGradient from "../bottom-gradient";
 import { Button } from "../button";
@@ -11,7 +11,7 @@ import LabelInputContainer from "../label-input-container";
 
 interface AddUpdateModuleModalType {
   openModal: boolean;
-  module?: ModuleType;
+  prevModule?: ModuleType | null;
   handleCloseModal: () => void;
 }
 
@@ -21,10 +21,11 @@ interface ModuleFormType {
 
 const AddUpdateModuleModal = ({
   openModal,
-  module,
+  prevModule,
   handleCloseModal,
 }: AddUpdateModuleModalType) => {
   const [globalError, setGlobalError] = useState<string>("");
+
   const {
     register,
     handleSubmit,
@@ -32,6 +33,12 @@ const AddUpdateModuleModal = ({
     reset,
   } = useForm<ModuleFormType>();
 
+  useEffect(() => {
+    if (prevModule?._id) {
+      reset(prevModule);
+    } else reset({title: ""});
+  }, [prevModule?._id]);
+  
   const onSubmit = handleSubmit((data: ModuleFormType) => {
     console.log(data);
   });
@@ -60,7 +67,7 @@ const AddUpdateModuleModal = ({
           {/* Modal Header */}
           <div className="p-3 border-b border-zinc-300">
             <h3 className="text-xl font-semibold text-center">
-              {module?._id ? "Update " : "Add New "} Module
+              {prevModule?._id ? "Update " : "Add New "} Module
             </h3>
           </div>
 
@@ -98,9 +105,10 @@ const AddUpdateModuleModal = ({
                 )}
                 {isLoading || isUpdating
                   ? "Loading..."
-                  : module?._id
+                  : prevModule?._id
                   ? "Update"
-                  : "Add"} Module
+                  : "Add"}{" "}
+                Module
                 <BottomGradient />
               </Button>
             </form>
