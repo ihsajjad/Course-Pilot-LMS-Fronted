@@ -1,6 +1,15 @@
 "use client";
 
-import { LectureType } from "@/lib/types";
+import {
+  useCreateLectureMutation,
+  useUpdateLectureMutation,
+} from "@/lib/redux/api";
+import {
+  CreateLectureBodyType,
+  LectureType,
+  UpdateLectureBodyType,
+} from "@/lib/types";
+import { errorToast, successToast } from "@/lib/utils";
 import { Edit, LoaderCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,8 +23,12 @@ import ManageResources from "../manage-resources";
 
 interface Props {
   openModal: boolean;
-  prevLecture?: LectureType | null;
+  lectureModalData: {
+    prevLecture: LectureType | null;
+    moduleId: string;
+  };
   handleCloseModal: () => void;
+  courseId: string;
 }
 
 export interface LectureFormType {
@@ -32,19 +45,16 @@ const defaultValue: LectureType = {
 
 const AddUpdateLecturesModal = ({
   openModal,
-  prevLecture,
+  lectureModalData: { prevLecture, moduleId },
   handleCloseModal,
+  courseId,
 }: Props) => {
   const [globalError, setGlobalError] = useState<string>("");
   const [lecture, setLecture] = useState<LectureType>(defaultValue);
 
-  useEffect(() => {
-    if (prevLecture) {
-      console.log(prevLecture);
-      setLecture(prevLecture);
-    } else setLecture(defaultValue);
-  }, [prevLecture?._id]);
-
+  const [createLecture, { isLoading: isCreating }] = useCreateLectureMutation();
+  const [updateLecture, { isLoading: isUpdating }] = useUpdateLectureMutation();
+  
   const {
     register,
     handleSubmit,
@@ -52,9 +62,15 @@ const AddUpdateLecturesModal = ({
     reset,
   } = useForm<LectureFormType>();
 
+  // resetting existing lecture data to update
+  useEffect(() => {
+    if (prevLecture) {
+      setLecture(prevLecture);
+    } else { setLecture(defaultValue);  reset()};
+  }, [prevLecture?._id]);
+
   const onSubmit = handleSubmit((data: LectureFormType) => {
     setLecture((p) => ({ ...p, ...data }));
-    reset();
   });
 
   // to edit individual lecture
@@ -65,10 +81,37 @@ const AddUpdateLecturesModal = ({
 
   // To save to the DB
   const handleSaveLectures = async () => {
-    console.log(lecture);
-  };
+    const { resources, title, videoUrl } = lecture;
 
-  const isLoading = false;
+    const lectureId = prevLecture?._id;
+    const createData: CreateLectureBodyType = {
+      courseId,
+      moduleId,
+      title,
+      videoUrl,
+      resources,
+    };
+
+    let res;
+    if (lectureId) {
+      const updateData: UpdateLectureBodyType = {
+        ...createData,
+        lectureId,
+      };
+      res = await updateLecture(updateData); // to update exesting course
+    } else {
+      res = await createLecture(createData); // to create new course
+    }
+
+    if (res.data?.success) {
+      successToast(res.data?.message);
+      handleCloseModal();
+      setLecture(defaultValue);
+    } else {
+      errorToast(res?.data?.message as string);
+      setGlobalError(res?.data?.message as string);
+    }
+  };
 
   return (
     <div
@@ -91,7 +134,7 @@ const AddUpdateLecturesModal = ({
           {/* Modal Header */}
           <div className="p-3 border-b border-zinc-300">
             <h3 className="text-xl font-semibold text-center">
-              Update Lectures
+              {prevLecture?._id ? "Update " : "Add "} Lecture
             </h3>
           </div>
 
@@ -118,6 +161,7 @@ const AddUpdateLecturesModal = ({
               )}
             </div>
 
+            {/* rendering the lecture form conditionally */}
             {!lecture.title && !lecture.videoUrl && (
               <form className="mb-1 mt-3" onSubmit={onSubmit}>
                 <LabelInputContainer className="mb-2">
@@ -175,12 +219,17 @@ const AddUpdateLecturesModal = ({
             <Button
               onClick={handleSaveLectures}
               type="submit"
-              // color={"primary"}
               className="group/btn mt-2 relative h-10 w-full rounded-md bg-primary font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
-              disabled={isLoading}
+              disabled={isCreating || isUpdating}
             >
-              {isLoading && <LoaderCircle className="w-6 h-6 animate-spin " />}
-              {isLoading ? "Loading..." : "Save Lecture"}
+              {(isCreating || isUpdating) && (
+                <LoaderCircle className="w-6 h-6 animate-spin " />
+              )}
+              {isCreating || isUpdating
+                ? "Loading..."
+                : prevLecture?._id
+                ? "Update Lecture"
+                : "Add Lecture"}
               <BottomGradient />
             </Button>
           </div>

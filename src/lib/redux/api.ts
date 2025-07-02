@@ -3,9 +3,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   CourseQueryType,
   CourseType,
+  CreateLectureBodyType,
   CreateModuleBodyType,
   CurrentUser,
   GetCoursesType,
+  UpdateLectureBodyType,
   UpdateModuleBodyType,
 } from "../types";
 
@@ -103,6 +105,24 @@ export const api = createApi({
       }),
       invalidatesTags: ["Course"],
     }),
+
+    createLecture: builder.mutation<ApiResponse, CreateLectureBodyType>({
+      query: (lectureData) => ({
+        url: "/courses/lecture",
+        method: "POST",
+        body: lectureData,
+      }),
+      invalidatesTags: ["Course"],
+    }),
+
+    updateLecture: builder.mutation<ApiResponse, UpdateLectureBodyType>({
+      query: (lectureData) => ({
+        url: "/courses/lecture",
+        method: "PUT",
+        body: lectureData,
+      }),
+      invalidatesTags: ["Course"],
+    }),
   }),
 });
 
@@ -116,5 +136,7 @@ export const {
   useUpdateCourseMutation,
   useGetCourseByIdQuery,
   useCreateModuleMutation,
-  useUpdateModuleMutation
+  useUpdateModuleMutation,
+  useCreateLectureMutation,
+  useUpdateLectureMutation
 } = api;

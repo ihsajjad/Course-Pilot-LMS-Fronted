@@ -84,14 +84,23 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
   const [openUpdateLecModal, setUpdateLecModal] = useState(false);
 
   const [prevModule, setPrevModule] = useState<ModuleType | null>(null);
-  const [prevLecture, setPrevLecture] = useState<LectureType | null>(null);
+  const [lectureModalData, setLectureModalData] = useState<{
+    prevLecture: LectureType | null;
+    moduleId: string;
+  }>({ prevLecture: null, moduleId: "" });
 
   if (isLoading) {
     return "Loading...";
   }
 
-  const handleOpenLecModal = (lecture?: LectureType | null) => {
-    setPrevLecture(lecture || null);
+  const handleOpenLecModal = ({
+    prevLecture,
+    moduleId,
+  }: {
+    prevLecture: LectureType | null;
+    moduleId: string;
+    }) => {
+    setLectureModalData({ prevLecture, moduleId });
     setUpdateLecModal(true);
   };
 
@@ -135,10 +144,11 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
       <UpdateLecturesModal
         openModal={openUpdateLecModal}
         handleCloseModal={() => {
-          setPrevLecture(null);
+          setLectureModalData({ prevLecture: null, moduleId: "" });
           setUpdateLecModal(false);
         }}
-        prevLecture={prevLecture}
+        lectureModalData={lectureModalData}
+        courseId={_id}
       />
     </div>
   );

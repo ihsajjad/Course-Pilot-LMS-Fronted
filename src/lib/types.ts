@@ -81,3 +81,15 @@ export type UpdateModuleBodyType = {
   title: string;
   moduleId: string;
 };
+
+export type CreateLectureBodyType = {
+  courseId: string;
+  moduleId: string;
+  title: string;
+  videoUrl: string;
+  resources: string[];
+};
+
+export type UpdateLectureBodyType = CreateLectureBodyType & {
+  lectureId: string;
+};

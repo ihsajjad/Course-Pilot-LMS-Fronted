@@ -12,7 +12,10 @@ import { Input } from "./input";
 interface CourseContentProps {
   modules: ModuleType[];
   handleOpenModuleModal: (module: ModuleType | null) => void;
-  handleOpenLecModal: (lecture: LectureType | null) => void;
+  handleOpenLecModal: (lectureModalData: {
+    prevLecture: LectureType | null;
+    moduleId: string;
+  }) => void;
 }
 
 const CourseContent = ({
@@ -62,7 +65,12 @@ const CourseContent = ({
                       {/* buttons */}
                       <div className="absolute right-2 top-0 hidden group-hover:flex items-center justify-end gap-2 h-full">
                         <button
-                          onClick={() => handleOpenLecModal(lecture)}
+                          onClick={() =>
+                            handleOpenLecModal({
+                              prevLecture: lecture,
+                              moduleId: module._id,
+                            })
+                          }
                           className="h-5 w-5 flex items-center justify-center bg-orange-500 text-neutral-200 rounded-full cursor-pointer"
                         >
                           <Edit size={12} />
@@ -77,14 +85,19 @@ const CourseContent = ({
                     </div>
                   ))
                 ) : (
-                  <div className="italic text-muted">
+                  <div className="italic text-neutral-600 my-1 text-center">
                     No lectures added yet.
                   </div>
                 )}
 
                 <div className="flex items-center justify-between gap-2">
                   <Button
-                    onClick={() => handleOpenLecModal(null)}
+                    onClick={() =>
+                      handleOpenLecModal({
+                        prevLecture: null,
+                        moduleId: module._id,
+                      })
+                    }
                     className="gap-2 flex-1"
                     variant="secondary"
                     size="sm"
