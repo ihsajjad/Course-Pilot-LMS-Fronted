@@ -10,7 +10,10 @@ import {
 } from "./accordion";
 import { Button } from "./button";
 import { Input } from "./input";
-import { useDeleteModuleMutation } from "@/lib/redux/api";
+import {
+  useDeleteLectureMutation,
+  useDeleteModuleMutation,
+} from "@/lib/redux/api";
 import { errorToast, successToast } from "@/lib/utils";
 import { useState } from "react";
 
@@ -34,6 +37,8 @@ const CourseContent = ({
 
   const [deleteModule, { isLoading: isDeletingModule }] =
     useDeleteModuleMutation();
+  const [deleteLecture, { isLoading: isDeletingLecture }] =
+    useDeleteLectureMutation();
 
   // To delete module based on id
   const handleDeleteModule = async (courseId: string, moduleId: string) => {
@@ -46,6 +51,20 @@ const CourseContent = ({
     }
   };
 
+  // To delete lecture based on id
+  const handleDeleteLecture = async (
+    courseId: string,
+    moduleId: string,
+    lectureId: string
+  ) => {
+    setDeletingId(lectureId);
+    const res = await deleteLecture({ courseId, moduleId, lectureId });
+    if (res.data?.success) {
+      successToast(res.data?.message);
+    } else {
+      errorToast(res?.data?.message as string);
+    }
+  };
 
   return (
     <div className="col-span-1 border rounded-xl p-3">
@@ -110,14 +129,23 @@ const CourseContent = ({
                         >
                           <Edit size={12} />
                         </button>
+
+                        {/* Delete lecture button */}
                         <span
                           onClick={() =>
-                            handleDeleteModule(courseId, module._id)
+                            handleDeleteLecture(
+                              courseId,
+                              module._id,
+                              lecture?._id
+                            )
                           }
                           className="bg-red-400 hover:bg-red-500 h-6 w-6 flex items-center justify-center rounded-full text-white cursor-pointer"
                         >
-                          {deletingId === module._id ? (
-                            <LoaderCircle className="w-5 h-5 animate-spin " size={15} />
+                          {deletingId === lecture._id ? (
+                            <LoaderCircle
+                              className="w-5 h-5 animate-spin "
+                              size={15}
+                            />
                           ) : (
                             <Trash2 size={15} />
                           )}

@@ -139,6 +139,17 @@ export const api = createApi({
       }),
       invalidatesTags: ["Course"],
     }),
+
+    deleteLecture: builder.mutation<
+      ApiResponse,
+      { courseId: string; moduleId: string; lectureId: string }
+    >({
+      query: ({ courseId, moduleId, lectureId }) => ({
+        url: `/courses/lecture/${courseId}/${moduleId}/${lectureId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Course"],
+    }),
   }),
 });
 
@@ -157,4 +168,5 @@ export const {
   useDeleteModuleMutation,
   useCreateLectureMutation,
   useUpdateLectureMutation,
+  useDeleteLectureMutation,
 } = api;
