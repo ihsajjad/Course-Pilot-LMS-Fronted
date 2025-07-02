@@ -88,6 +88,11 @@ export const api = createApi({
       providesTags: ["Course"],
     }),
 
+    deleteCourseById: builder.mutation<ApiResponse, string>({
+      query: (courseId) => ({ url: `/courses/${courseId}`, method: "DELETE" }),
+      invalidatesTags: ["Courses"]
+    }),
+
     createModule: builder.mutation<ApiResponse, CreateModuleBodyType>({
       query: (moduleData) => ({
         url: "/courses/module",
@@ -133,10 +138,11 @@ export const {
   useSignOutUserMutation,
   useCreateCourseMutation,
   useGetCoursesQuery,
+  useDeleteCourseByIdMutation,
   useUpdateCourseMutation,
   useGetCourseByIdQuery,
   useCreateModuleMutation,
   useUpdateModuleMutation,
   useCreateLectureMutation,
-  useUpdateLectureMutation
+  useUpdateLectureMutation,
 } = api;

@@ -1,8 +1,13 @@
+"use client";
+
 import { CourseType } from "@/lib/types";
 import Image from "next/image";
 import React from "react";
 import { Button } from "./button";
 import Link from "next/link";
+import { LoaderCircle, Trash, Trash2 } from "lucide-react";
+import { useDeleteCourseByIdMutation } from "@/lib/redux/api";
+import { errorToast, successToast } from "@/lib/utils";
 
 const CourseCard = ({
   course,
@@ -11,6 +16,18 @@ const CourseCard = ({
   course: CourseType;
   updateModal: (course: CourseType) => void;
 }) => {
+  const [deleteCourse, { isLoading: isDeleting }] =
+    useDeleteCourseByIdMutation();
+
+  const handleDelete = async (id: string) => {
+    const res = await deleteCourse(id);
+    if (res.data?.success) {
+      successToast(res.data?.message);
+    } else {
+      errorToast(res?.data?.message as string);
+    }
+  };
+
   return (
     <div
       key={course._id}
@@ -34,6 +51,17 @@ const CourseCard = ({
         <div className="mt-auto flex items-center justify-between">
           <span className="font-medium text-primary">৳ {course.price}</span>
           <div className="flex gap-2">
+            <Button
+              onClick={() => handleDelete(course._id)}
+              variant={"destructive"}
+              size={"sm"}
+            >
+              {isDeleting ? (
+                <LoaderCircle className="w-6 h-6 animate-spin " />
+              ) : (
+                <Trash2 />
+              )}
+            </Button>
             <Link
               href={`/dashboard/edit-module/${course._id}`}
               className="border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-2 rounded-md flex items-center justify-center"
