@@ -3,8 +3,10 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   CourseQueryType,
   CourseType,
+  CreateModuleBodyType,
   CurrentUser,
   GetCoursesType,
+  UpdateModuleBodyType,
 } from "../types";
 
 // Union type for either a successful response or a Zod validation error
@@ -19,7 +21,7 @@ export const api = createApi({
     credentials: "include",
   }),
   reducerPath: "api",
-  tagTypes: ["CurrentUser", "Courses"],
+  tagTypes: ["CurrentUser", "Courses", "Course"],
   endpoints: (builder) => ({
     signUp: builder.mutation<ApiResponse & { data: CurrentUser }, FormData>({
       query: (formData) => ({
@@ -81,6 +83,25 @@ export const api = createApi({
 
     getCourseById: builder.query<CourseType, string>({
       query: (_id) => `/courses/${_id}`,
+      providesTags: ["Course"],
+    }),
+
+    createModule: builder.mutation<ApiResponse, CreateModuleBodyType>({
+      query: (moduleData) => ({
+        url: "/courses/module",
+        method: "POST",
+        body: moduleData,
+      }),
+      invalidatesTags: ["Course"],
+    }),
+
+    updateModule: builder.mutation<ApiResponse, UpdateModuleBodyType>({
+      query: (moduleData) => ({
+        url: "/courses/module",
+        method: "PUT",
+        body: moduleData,
+      }),
+      invalidatesTags: ["Course"],
     }),
   }),
 });
@@ -94,4 +115,6 @@ export const {
   useGetCoursesQuery,
   useUpdateCourseMutation,
   useGetCourseByIdQuery,
+  useCreateModuleMutation,
+  useUpdateModuleMutation
 } = api;

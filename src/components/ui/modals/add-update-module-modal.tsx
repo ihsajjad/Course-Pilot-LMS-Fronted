@@ -1,3 +1,5 @@
+"use client";
+
 import { ModuleType } from "@/lib/types";
 import { LoaderCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -8,11 +10,17 @@ import { Input } from "../input";
 import InputError from "../input-error";
 import { Label } from "../label";
 import LabelInputContainer from "../label-input-container";
+import {
+  useCreateModuleMutation,
+  useUpdateModuleMutation,
+} from "@/lib/redux/api";
+import { errorToast, successToast } from "@/lib/utils";
 
 interface AddUpdateModuleModalType {
   openModal: boolean;
   prevModule?: ModuleType | null;
   handleCloseModal: () => void;
+  courseId: string;
 }
 
 interface ModuleFormType {
@@ -23,8 +31,12 @@ const AddUpdateModuleModal = ({
   openModal,
   prevModule,
   handleCloseModal,
+  courseId,
 }: AddUpdateModuleModalType) => {
   const [globalError, setGlobalError] = useState<string>("");
+
+  const [createMoule, { isLoading: isCreating }] = useCreateModuleMutation(); // to create module
+  const [updateModule, { isLoading: isUpdating }] = useUpdateModuleMutation(); // to update module
 
   const {
     register,
@@ -33,18 +45,33 @@ const AddUpdateModuleModal = ({
     reset,
   } = useForm<ModuleFormType>();
 
+  // reseting previous module data to update
   useEffect(() => {
     if (prevModule?._id) {
       reset(prevModule);
-    } else reset({title: ""});
+    } else reset({ title: "" });
   }, [prevModule?._id]);
-  
-  const onSubmit = handleSubmit((data: ModuleFormType) => {
-    console.log(data);
-  });
 
-  const isLoading = false,
-    isUpdating = false;
+  const onSubmit = handleSubmit(async (data: ModuleFormType) => {
+    const moduleId = prevModule?._id;
+
+    let res;
+    // if moduleId exists : updating the data
+    if (moduleId) {
+      res = await updateModule({ ...data, courseId, moduleId });
+    } else {
+      // If moduleId doesn't exist : creating new module
+      res = await createMoule({ ...data, courseId });
+    }
+
+    if (res.data?.success) {
+      successToast(res.data?.message);
+      handleCloseModal();
+    } else {
+      errorToast(res?.data?.message as string);
+      setGlobalError(res?.data?.message as string);
+    }
+  });
 
   return (
     <div
@@ -98,17 +125,16 @@ const AddUpdateModuleModal = ({
                 className="group/btn relative h-10 w-full rounded-md bg-primary font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
                 type="submit"
                 color={"primary"}
-                //   disabled={isAdding || isUpdating}
+                disabled={isCreating || isUpdating}
               >
-                {(isLoading || isUpdating) && (
+                {(isCreating || isUpdating) && (
                   <LoaderCircle className="w-6 h-6 animate-spin " />
                 )}
-                {isLoading || isUpdating
+                {isCreating || isUpdating
                   ? "Loading..."
                   : prevModule?._id
-                  ? "Update"
-                  : "Add"}{" "}
-                Module
+                  ? "Update Module"
+                  : "Add Module"}
                 <BottomGradient />
               </Button>
             </form>

@@ -37,11 +37,10 @@ export type CurrentUser = {
 
 // types/lecture.ts
 
-
 export type LectureType = {
   _id: string;
   title: string;
-  videoUrl: string; 
+  videoUrl: string;
   resources: string[];
 };
 
@@ -73,4 +72,12 @@ export type CourseQueryType = {
   text: string;
   sortByPrice: "price HtoL" | "price LtoH";
   page: number;
+};
+
+export type CreateModuleBodyType = { courseId: string; title: string };
+
+export type UpdateModuleBodyType = {
+  courseId: string;
+  title: string;
+  moduleId: string;
 };
