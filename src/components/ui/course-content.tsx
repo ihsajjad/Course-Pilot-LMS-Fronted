@@ -25,7 +25,7 @@ interface CourseContentProps {
     moduleId: string;
   }) => void;
   courseId: string;
-  setVideoUrl: Dispatch<SetStateAction<string>>;
+  setCurrVideo: Dispatch<SetStateAction<{ mod: number; lec: number }>>;
 }
 
 const CourseContent = ({
@@ -33,7 +33,7 @@ const CourseContent = ({
   handleOpenModuleModal,
   handleOpenLecModal,
   courseId,
-  setVideoUrl,
+  setCurrVideo,
 }: CourseContentProps) => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -69,7 +69,7 @@ const CourseContent = ({
   };
 
   return (
-    <div className="col-span-1 border rounded-xl p-3">
+    <div className="col-span-1 border rounded-xl p-3 h-fit sticky top-14">
       <h4 className="text-lg font-medium text-neutral-600 dark:text-neutral-300">
         Course Content
       </h4>
@@ -112,7 +112,7 @@ const CourseContent = ({
                   module.lectures.map((lecture, idx) => (
                     <div
                       key={lecture._id}
-                      onClick={() => setVideoUrl(lecture.videoUrl)}
+                      onClick={() => setCurrVideo({ mod: i, lec: idx })}
                       className="group p-1 md:p-2 md:px-3 text-sm md:text-base rounded-md hover:bg-muted transition-colors border border-transparent hover:border-border cursor-pointer relative"
                     >
                       <span className="font-medium text-neutral-600 dark:text-neutral-300">{`📘 Lecture ${

@@ -1,7 +1,47 @@
+"use client";
 
-const VideoIframe = ({ videoUrl }: { videoUrl: string }) => {
+import { ModuleType } from "@/lib/types";
+import { Dispatch, SetStateAction } from "react";
+import { Button } from "./button";
+
+interface Props {
+  currVideo: { mod: number; lec: number };
+  modules: ModuleType[];
+  setCurrVideo: Dispatch<SetStateAction<{ mod: number; lec: number }>>;
+}
+
+const VideoIframe = ({ currVideo, modules, setCurrVideo }: Props) => {
+  const { mod, lec } = currVideo;
+
+  const videoUrl = modules[mod]?.lectures[lec]?.videoUrl || "";
+
+  const prevMod = modules[mod - 1]?.lectures[lec - 1]?.videoUrl; // prevous module's prevous lecture
+  const prevLec = modules[mod]?.lectures[lec - 1]?.videoUrl; // same module's prevous lecture
+  const nextMod = modules[mod + 1]?.lectures[lec + 1]?.videoUrl; // next module's next lecture
+  const nextLec = modules[mod]?.lectures[lec + 1]?.videoUrl; // same module's next lecture
+
+  const prevLink = prevMod || prevLec;
+  const nextLink = nextMod || nextLec;
+
+  const handlePrev = () => {
+    if (prevMod) {
+      setCurrVideo((p) => ({ mod: p.mod - 1, lec: p.lec - 1 }));
+    } else if (prevLec) {
+      setCurrVideo((p) => ({ mod: p.mod, lec: p.lec - 1 }));
+    }
+  };
+
+  const handleNext = () => {
+    if (nextMod) {
+      setCurrVideo((p) => ({ mod: p.mod + 1, lec: p.lec + 1 }));
+    } else if (nextLec) {
+      setCurrVideo((p) => ({ mod: p.mod, lec: p.lec + 1 }));
+    }
+  };
+
   return (
     <div className="col-span-1 lg:col-span-2">
+      {/* Video */}
       <div className="relative w-full aspect-video rounded-md overflow-hidden">
         {videoUrl && (
           <iframe
@@ -13,6 +53,17 @@ const VideoIframe = ({ videoUrl }: { videoUrl: string }) => {
             className="absolute top-0 left-0 w-full h-full"
           ></iframe>
         )}
+      </div>
+
+      {/* Navigation Buttons */}
+      <div className="mt-4 flex items-center justify-between gap-4">
+        <Button onClick={handlePrev} disabled={!prevLink} variant={"ghost"}>
+          ⬅️ Previous
+        </Button>
+
+        <Button onClick={handleNext} disabled={!nextLink} variant={"default"}>
+          Next ➡️
+        </Button>
       </div>
     </div>
   );
