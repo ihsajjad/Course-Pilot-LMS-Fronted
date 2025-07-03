@@ -4,7 +4,7 @@ import AddUpdateModuleModal from "@/components/ui/modals/add-update-module-modal
 import UpdateLecturesModal from "@/components/ui/modals/update-lectures-modal";
 import VideoIframe from "@/components/ui/video-iframe";
 import { useGetCourseByIdQuery } from "@/lib/redux/api";
-import { CourseType, LectureType, ModuleType } from "@/lib/types";
+import { LectureType, ModuleType } from "@/lib/types";
 import { use, useEffect, useState } from "react";
 
 const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
