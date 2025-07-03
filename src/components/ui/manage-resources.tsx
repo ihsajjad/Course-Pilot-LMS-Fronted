@@ -5,14 +5,21 @@ import { Edit, X } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FileUpload } from "./file-upload";
+import { useUploadPDFMutation } from "@/lib/redux/api";
+import { errorToast, successToast } from "@/lib/utils";
 
 interface ManageResourcesProps {
   resources: string[];
   setLecture: Dispatch<SetStateAction<LectureType>>;
+  setGlobalError: Dispatch<SetStateAction<string>>;
 }
 
-const ManageResources = ({ resources, setLecture }: ManageResourcesProps) => {
-  const [globalError, setGlobalError] = useState<string>("");
+const ManageResources = ({
+  resources,
+  setLecture,
+  setGlobalError,
+}: ManageResourcesProps) => {
+  const [uploadPDF, { isLoading: isUploadingFile }] = useUploadPDFMutation();
 
   // remove resourc form the resources array
   const handleRemoveResource = (url: string) => {
@@ -20,8 +27,23 @@ const ManageResources = ({ resources, setLecture }: ManageResourcesProps) => {
     setLecture((p) => ({ ...p, resources: reminings }));
   };
 
-  const handleFileUpload = (files: File[]) => {
-    console.log(files);
+  // To upload pdf resource
+  const handleFileUpload = async (files: File[]) => {
+    const formData = new FormData();
+    formData.append("pdf", files[0]);
+
+    const res = await uploadPDF(formData);
+
+    if (res.data?.success) {
+      successToast(res.data?.message);
+      setLecture((prev) => ({
+        ...prev,
+        resources: [...prev.resources, res.data.url],
+      }));
+    } else {
+      errorToast(res?.data?.message as string);
+      setGlobalError(res?.data?.message as string);
+    }
   };
 
   return (
@@ -33,7 +55,7 @@ const ManageResources = ({ resources, setLecture }: ManageResourcesProps) => {
           resources.map((resource, i) => (
             <div
               key={resource}
-              className="px-3 py-1.5 bg-neutral-100 rounded-md relative"
+              className="px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-md relative break-words"
             >
               <p className="text-xs -mt-1">{resource}</p>
 
@@ -54,7 +76,10 @@ const ManageResources = ({ resources, setLecture }: ManageResourcesProps) => {
         )}
       </div>
 
-      <FileUpload onChange={handleFileUpload} />
+      <FileUpload
+        onChange={handleFileUpload}
+        isUploadingFile={isUploadingFile}
+      />
     </div>
   );
 };

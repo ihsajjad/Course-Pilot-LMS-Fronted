@@ -122,6 +122,7 @@ export const api = createApi({
       invalidatesTags: ["Course"],
     }),
 
+    // Lecture apis
     createLecture: builder.mutation<ApiResponse, CreateLectureBodyType>({
       query: (lectureData) => ({
         url: "/courses/lecture",
@@ -150,6 +151,14 @@ export const api = createApi({
       }),
       invalidatesTags: ["Course"],
     }),
+
+    uploadPDF: builder.mutation<ApiResponse & { url: string }, FormData>({
+      query: (formData) => ({
+        url: "/courses/upload-rsource",
+        method: "POST",
+        body: formData,
+      }),
+    }),
   }),
 });
 
@@ -169,4 +178,5 @@ export const {
   useCreateLectureMutation,
   useUpdateLectureMutation,
   useDeleteLectureMutation,
+  useUploadPDFMutation,
 } = api;

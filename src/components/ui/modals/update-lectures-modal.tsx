@@ -54,7 +54,7 @@ const AddUpdateLecturesModal = ({
 
   const [createLecture, { isLoading: isCreating }] = useCreateLectureMutation();
   const [updateLecture, { isLoading: isUpdating }] = useUpdateLectureMutation();
-  
+
   const {
     register,
     handleSubmit,
@@ -66,7 +66,10 @@ const AddUpdateLecturesModal = ({
   useEffect(() => {
     if (prevLecture) {
       setLecture(prevLecture);
-    } else { setLecture(defaultValue);  reset()};
+    } else {
+      setLecture(defaultValue);
+      reset();
+    }
   }, [prevLecture?._id]);
 
   const onSubmit = handleSubmit((data: LectureFormType) => {
@@ -214,13 +217,14 @@ const AddUpdateLecturesModal = ({
             <ManageResources
               resources={lecture.resources}
               setLecture={setLecture}
+              setGlobalError={setGlobalError}
             />
 
             <Button
               onClick={handleSaveLectures}
               type="submit"
               className="group/btn mt-2 relative h-10 w-full rounded-md bg-primary font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
-              disabled={isCreating || isUpdating}
+              disabled={isCreating || isUpdating || !lecture.title}
             >
               {(isCreating || isUpdating) && (
                 <LoaderCircle className="w-6 h-6 animate-spin " />
