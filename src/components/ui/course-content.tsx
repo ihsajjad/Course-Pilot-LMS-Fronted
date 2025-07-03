@@ -1,7 +1,13 @@
 "use client";
 
+import {
+  useDeleteLectureMutation,
+  useDeleteModuleMutation,
+} from "@/lib/redux/api";
 import { LectureType, ModuleType } from "@/lib/types";
-import { Edit, LoaderCircle, Plus, Trash2, X } from "lucide-react";
+import { errorToast, successToast } from "@/lib/utils";
+import { Edit, LoaderCircle, Plus, Trash2 } from "lucide-react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -10,12 +16,6 @@ import {
 } from "./accordion";
 import { Button } from "./button";
 import { Input } from "./input";
-import {
-  useDeleteLectureMutation,
-  useDeleteModuleMutation,
-} from "@/lib/redux/api";
-import { errorToast, successToast } from "@/lib/utils";
-import { useState } from "react";
 
 interface CourseContentProps {
   modules: ModuleType[];
@@ -25,6 +25,7 @@ interface CourseContentProps {
     moduleId: string;
   }) => void;
   courseId: string;
+  setVideoUrl: Dispatch<SetStateAction<string>>;
 }
 
 const CourseContent = ({
@@ -32,6 +33,7 @@ const CourseContent = ({
   handleOpenModuleModal,
   handleOpenLecModal,
   courseId,
+  setVideoUrl,
 }: CourseContentProps) => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -110,6 +112,7 @@ const CourseContent = ({
                   module.lectures.map((lecture, idx) => (
                     <div
                       key={lecture._id}
+                      onClick={() => setVideoUrl(lecture.videoUrl)}
                       className="group p-1 md:p-2 md:px-3 text-sm md:text-base rounded-md hover:bg-muted transition-colors border border-transparent hover:border-border cursor-pointer relative"
                     >
                       <span className="font-medium text-neutral-600 dark:text-neutral-300">{`📘 Lecture ${
