@@ -13,7 +13,7 @@ const initialState: InitialState = {
     name: "",
     role: "User",
     profile: "",
-    enrolledCourses: [],
+    enrolledCourseIds: [],
   },
   isLoading: false,
 };

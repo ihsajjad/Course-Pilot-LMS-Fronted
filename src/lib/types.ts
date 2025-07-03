@@ -1,16 +1,7 @@
-export type LectureProgressType = {
-  lectureId: string;
-  isCompleted: boolean;
-};
-
-export type CourseProgressType = {
-  courseId: string;
-  completedLectures: LectureProgressType[]; // per lecture tracking
-};
-
 export type EnrolledCourseType = {
   courseId: string;
   enrolledAt: Date; // ISO date string
+  completedLectures: string[]; // per lecture tracking
 };
 
 export type UserType = {
@@ -21,7 +12,6 @@ export type UserType = {
   profile: string; // Cloudinary URL or optional fallback
   role: "Admin" | "User";
   enrolledCourses: EnrolledCourseType[];
-  progress: CourseProgressType;
   createdAt: string;
   updatedAt: string;
 };
@@ -32,10 +22,8 @@ export type CurrentUser = {
   email: string;
   profile: string;
   role: "Admin" | "User";
-  enrolledCourses: EnrolledCourseType[];
+  enrolledCourseIds: string[];
 };
-
-// types/lecture.ts
 
 export type LectureType = {
   _id: string;

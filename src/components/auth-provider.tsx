@@ -61,7 +61,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     );
   }
 
-  return <div>{children}</div>;
+  return <div className="min-h-[calc(100vh-53px)]">{children}</div>;
 };
 
 export default AuthProvider;

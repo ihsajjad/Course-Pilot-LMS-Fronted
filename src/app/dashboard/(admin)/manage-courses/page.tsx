@@ -2,7 +2,7 @@
 
 import AddUpdateCourseModal from "@/components/ui/add-update-course-modal";
 import { Button } from "@/components/ui/button";
-import CourseCard from "@/components/ui/course-card";
+import CourseCardAdmin from "@/components/ui/course-card-admin";
 import CourseQueries from "@/components/ui/course-queries";
 import CoursesPagination from "@/components/ui/courses-pagination";
 import { useGetCoursesQuery } from "@/lib/redux/api";
@@ -61,7 +61,7 @@ const AllCourses = () => {
       {/* Course card container */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data?.courses.map((course) => (
-          <CourseCard
+          <CourseCardAdmin
             key={course._id}
             course={course}
             updateModal={handleOpenUpdateModal}
