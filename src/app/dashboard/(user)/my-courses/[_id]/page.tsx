@@ -1,13 +1,13 @@
 "use client";
 import CourseContent from "@/components/ui/course-content";
 import VideoIframe from "@/components/ui/video-iframe";
-import { useGetCourseByIdQuery } from "@/lib/redux/api";
+import { useGetCourseContentByIdQuery } from "@/lib/redux/api";
 import { ModuleType } from "@/lib/types";
 import { use, useEffect, useState } from "react";
 
 const SingleCourse = ({ params }: { params: Promise<{ _id: string }> }) => {
   const { _id } = use(params);
-  const { data: course, isLoading } = useGetCourseByIdQuery(_id);
+  const { data: course, isLoading } = useGetCourseContentByIdQuery(_id);
 
   const [currVideo, setCurrVideo] = useState<{ mod: number; lec: number }>({
     mod: 0,

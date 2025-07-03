@@ -1,0 +1,154 @@
+import { fetchCoursePageById } from "@/lib/server-api";
+import { notFound } from "next/navigation";
+import {
+  PlayCircle,
+  Clock,
+  BookOpen,
+  BarChart2,
+  Star,
+  ShoppingCart,
+  User,
+  ShieldCheck,
+} from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+
+export default async function CoursePage({
+  params,
+}: {
+  params: { _id: string };
+}) {
+  const { _id } = params;
+
+  const course = await fetchCoursePageById(_id);
+
+  if (!course) return notFound();
+
+  const instructor = {
+    name: "Alex Johnson",
+    avatar: "/instructor-avatar.jpg",
+  };
+
+  return (
+    <div className="min-h-screen p-4 sm:px-10 lg:px-20 font-[family-name:var(--font-geist-sans)] bg-gradient-to-b from-background/50 to-muted/20">
+      <div className="max-w-7xl mx-auto py-8 md:py-16">
+        {/* Course Card */}
+        <Card className="overflow-hidden border border-border/50 shadow-lg">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+            {/* Thumbnail Section */}
+            <div className="relative group">
+              <div className="aspect-video bg-gradient-to-tr from-primary/20 to-secondary/20 w-full h-full flex items-center justify-center">
+                {/* Thumbnail Image */}
+                <img
+                  src={course.thumbnail} // Replace with actual dynamic image URL
+                  alt="Course Thumbnail"
+                  className="w-full h-full object-cover"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10" />
+
+                <div className="absolute z-20 flex flex-col items-center justify-center p-8 text-center">
+                  <div className="bg-gradient-to-r from-primary to-secondary w-16 h-16 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform mb-4 cursor-pointer">
+                    <PlayCircle className="w-8 h-8 text-white" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-foreground">
+                    Preview this course
+                  </h2>
+                  <p className="text-muted-foreground text-sm mt-1">
+                    Click to see course content
+                  </p>
+                </div>
+              </div>
+
+              {/* Stats at bottom of thumbnail */}
+              <div className="absolute bottom-0 left-0 right-0 bg-background/90 backdrop-blur-sm z-30 p-4 flex justify-between">
+                <div className="flex items-center text-sm">
+                  <Clock className="w-4 h-4 mr-1 text-primary" />
+                  <span>24 hours</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <BookOpen className="w-4 h-4 mr-1 text-primary" />
+                  <span>8 modules</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <BarChart2 className="w-4 h-4 mr-1 text-primary" />
+                  <span>Intermediate</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Course Info */}
+            <CardContent className="p-8 flex flex-col h-full">
+              <div className="mb-6">
+                <Badge
+                  variant="secondary"
+                  className="bg-primary/10 text-primary"
+                >
+                  Web Development
+                </Badge>
+              </div>
+
+              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
+                {course.title}
+              </h1>
+
+              <p className="text-muted-foreground leading-relaxed mb-6">
+                {course.description}
+              </p>
+
+              {/* Instructor */}
+              <div className="flex items-center gap-3 mb-6 p-4 bg-muted/30 rounded-lg">
+                <Avatar className="w-12 h-12">
+                  <AvatarImage src={instructor.avatar} />
+                  <AvatarFallback>{instructor.name[0]}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-sm text-muted-foreground">Instructor</p>
+                  <p className="font-semibold">{instructor.name}</p>
+                </div>
+                <div className="ml-auto flex items-center bg-background px-3 py-1 rounded-full border border-border">
+                  <Star className="w-4 h-4 fill-yellow-500 text-yellow-500 mr-1" />
+                  <span className="font-semibold">{4.8}</span>
+                  <span className="text-muted-foreground ml-1">({2488})</span>
+                </div>
+              </div>
+
+              {/* Pricing & Enroll */}
+              <div className="mt-auto">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg border border-primary/20">
+                  <div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-2xl font-bold text-primary">
+                        ৳ {course.price.toFixed(2)}
+                      </span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      One-time payment. Lifetime access.
+                    </p>
+                  </div>
+                  <Button className="px-8 py-4 text-base font-bold gap-2">
+                    <ShoppingCart className="w-5 h-5" />
+                    Enroll Now
+                  </Button>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted-foreground">
+                  <div className="flex items-center">
+                    <ShieldCheck className="w-4 h-4 mr-2 text-green-500" />
+                    <span>30-day money-back guarantee</span>
+                  </div>
+                  <div className="flex items-center">
+                    <User className="w-4 h-4 mr-2 text-blue-500" />
+                    <span>Access to community</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}

@@ -83,8 +83,8 @@ export const api = createApi({
       providesTags: ["Courses"],
     }),
 
-    getCourseById: builder.query<CourseType, string>({
-      query: (_id) => `/courses/${_id}`,
+    getCourseContentById: builder.query<CourseType, string>({
+      query: (_id) => `/courses/content/${_id}`,
       providesTags: ["Course"],
     }),
 
@@ -171,7 +171,7 @@ export const {
   useGetCoursesQuery,
   useDeleteCourseByIdMutation,
   useUpdateCourseMutation,
-  useGetCourseByIdQuery,
+  useGetCourseContentByIdQuery,
   useCreateModuleMutation,
   useUpdateModuleMutation,
   useDeleteModuleMutation,
