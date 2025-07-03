@@ -1,73 +1,21 @@
 "use client";
 
-import {
-  useDeleteLectureMutation,
-  useDeleteModuleMutation,
-} from "@/lib/redux/api";
-import { LectureType, ModuleType } from "@/lib/types";
-import { errorToast, successToast } from "@/lib/utils";
-import { Edit, LoaderCircle, Plus, Trash2 } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { ModuleType } from "@/lib/types";
+import { Dispatch, SetStateAction } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "./accordion";
-import { Button } from "./button";
 import { Input } from "./input";
 
 interface CourseContentProps {
   modules: ModuleType[];
-  handleOpenModuleModal: (module: ModuleType | null) => void;
-  handleOpenLecModal: (lectureModalData: {
-    prevLecture: LectureType | null;
-    moduleId: string;
-  }) => void;
-  courseId: string;
   setCurrVideo: Dispatch<SetStateAction<{ mod: number; lec: number }>>;
 }
 
-const CourseContent = ({
-  modules,
-  handleOpenModuleModal,
-  handleOpenLecModal,
-  courseId,
-  setCurrVideo,
-}: CourseContentProps) => {
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  const [deleteModule, { isLoading: isDeletingModule }] =
-    useDeleteModuleMutation();
-  const [deleteLecture, { isLoading: isDeletingLecture }] =
-    useDeleteLectureMutation();
-
-  // To delete module based on id
-  const handleDeleteModule = async (courseId: string, moduleId: string) => {
-    setDeletingId(moduleId);
-    const res = await deleteModule({ courseId, moduleId });
-    if (res.data?.success) {
-      successToast(res.data?.message);
-    } else {
-      errorToast(res?.data?.message as string);
-    }
-  };
-
-  // To delete lecture based on id
-  const handleDeleteLecture = async (
-    courseId: string,
-    moduleId: string,
-    lectureId: string
-  ) => {
-    setDeletingId(lectureId);
-    const res = await deleteLecture({ courseId, moduleId, lectureId });
-    if (res.data?.success) {
-      successToast(res.data?.message);
-    } else {
-      errorToast(res?.data?.message as string);
-    }
-  };
-
+const CourseContent = ({ modules, setCurrVideo }: CourseContentProps) => {
   return (
     <div className="col-span-1 border rounded-xl p-3 h-fit sticky top-14">
       <h4 className="text-lg font-medium text-neutral-600 dark:text-neutral-300">
@@ -94,17 +42,6 @@ const CourseContent = ({
             >
               <AccordionTrigger className="px-4 py-3 bg-muted hover:bg-muted/60 relative">
                 {`Module ${i + 1}: ${module.title}`}{" "}
-                {/* Delete module button */}
-                <span
-                  onClick={() => handleDeleteModule(courseId, module._id)}
-                  className="bg-red-400 hover:bg-red-500 h-7 w-7 flex items-center justify-center rounded-full text-white cursor-pointer absolute top-2.5 right-12"
-                >
-                  {deletingId === module._id ? (
-                    <LoaderCircle className="w-5 h-5 animate-spin " />
-                  ) : (
-                    <Trash2 size={18} />
-                  )}
-                </span>
               </AccordionTrigger>
 
               <AccordionContent className="px-2 md:px-4 py-4 bg-background rounded-b-xl flex flex-col gap-1 text-sm text-muted-foreground">
@@ -119,41 +56,6 @@ const CourseContent = ({
                         idx + 1
                       }:`}</span>{" "}
                       {lecture.title}
-                      {/* buttons */}
-                      <div className="absolute right-2 top-0 hidden group-hover:flex items-center justify-end gap-2 h-full">
-                        <button
-                          onClick={() =>
-                            handleOpenLecModal({
-                              prevLecture: lecture,
-                              moduleId: module._id,
-                            })
-                          }
-                          className="h-6 w-6 flex items-center justify-center bg-orange-500 text-neutral-200 rounded-full cursor-pointer"
-                        >
-                          <Edit size={12} />
-                        </button>
-
-                        {/* Delete lecture button */}
-                        <span
-                          onClick={() =>
-                            handleDeleteLecture(
-                              courseId,
-                              module._id,
-                              lecture?._id
-                            )
-                          }
-                          className="bg-red-400 hover:bg-red-500 h-6 w-6 flex items-center justify-center rounded-full text-white cursor-pointer"
-                        >
-                          {deletingId === lecture._id ? (
-                            <LoaderCircle
-                              className="w-5 h-5 animate-spin "
-                              size={15}
-                            />
-                          ) : (
-                            <Trash2 size={15} />
-                          )}
-                        </span>
-                      </div>
                     </div>
                   ))
                 ) : (
@@ -161,45 +63,9 @@ const CourseContent = ({
                     No lectures added yet.
                   </div>
                 )}
-
-                <div className="flex items-center justify-between gap-2">
-                  <Button
-                    onClick={() =>
-                      handleOpenLecModal({
-                        prevLecture: null,
-                        moduleId: module._id,
-                      })
-                    }
-                    className="gap-2 flex-1"
-                    variant="secondary"
-                    size="sm"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Add Lecture
-                  </Button>
-                  <Button
-                    onClick={() => handleOpenModuleModal(module)}
-                    className="gap-2 flex-1"
-                    variant="secondary"
-                    size="sm"
-                  >
-                    <Edit className="w-4 h-4" />
-                    Update Module
-                  </Button>
-                </div>
               </AccordionContent>
             </AccordionItem>
           ))}
-
-        <Button
-          variant="default"
-          size="sm"
-          onClick={() => handleOpenModuleModal(null)}
-          className="gap-2 w-full"
-        >
-          <Plus className="w-4 h-4" />
-          Add Module
-        </Button>
       </Accordion>
     </div>
   );

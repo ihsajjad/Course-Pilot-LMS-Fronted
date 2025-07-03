@@ -1,5 +1,6 @@
 "use client";
 import CourseContent from "@/components/ui/course-content";
+import CourseContentAdmin from "@/components/ui/course-content-admin";
 import AddUpdateModuleModal from "@/components/ui/modals/add-update-module-modal";
 import UpdateLecturesModal from "@/components/ui/modals/update-lectures-modal";
 import VideoIframe from "@/components/ui/video-iframe";
@@ -64,7 +65,7 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
         <VideoIframe currVideo={currVideo} modules={course?.modules as ModuleType[]} setCurrVideo={setCurrVideo} />
 
         {/* Course Content Area */}
-        <CourseContent
+        <CourseContentAdmin
           modules={course?.modules as ModuleType[]}
           handleOpenModuleModal={handleOpenModuleModal}
           handleOpenLecModal={handleOpenLecModal}

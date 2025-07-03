@@ -1,4 +1,5 @@
 "use client";
+import CourseContent from "@/components/ui/course-content";
 import VideoIframe from "@/components/ui/video-iframe";
 import { useGetCourseByIdQuery } from "@/lib/redux/api";
 import { ModuleType } from "@/lib/types";
@@ -41,7 +42,10 @@ const SingleCourse = ({ params }: { params: Promise<{ _id: string }> }) => {
         />
 
         {/* Course Content Area */}
-        <div className="col-span-1 border rounded-xl p-3 h-fit sticky top-14"></div>
+        <CourseContent
+          modules={course?.modules as ModuleType[]}
+          setCurrVideo={setCurrVideo}
+        />
       </div>
     </div>
   );
