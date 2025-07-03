@@ -14,6 +14,8 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import CourseFeatures from "@/components/ui/course-features";
 
 export default async function CoursePage({
   params,
@@ -41,10 +43,12 @@ export default async function CoursePage({
             <div className="relative group">
               <div className="aspect-video bg-gradient-to-tr from-primary/20 to-secondary/20 w-full h-full flex items-center justify-center">
                 {/* Thumbnail Image */}
-                <img
+                <Image
                   src={course.thumbnail} // Replace with actual dynamic image URL
                   alt="Course Thumbnail"
-                  className="w-full h-full object-cover"
+                  height={200}
+                  width={350}
+                  className="w-full h-full object-cover rounded-md"
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10" />
@@ -148,6 +152,9 @@ export default async function CoursePage({
             </CardContent>
           </div>
         </Card>
+
+        {/* Course Features */}
+        <CourseFeatures />
       </div>
     </div>
   );
