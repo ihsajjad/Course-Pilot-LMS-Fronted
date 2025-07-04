@@ -1,4 +1,6 @@
 "use client";
+import CourseContentSkeleton from "@/components/skeletons/course-content-skeleton";
+import VideoSkeleton from "@/components/skeletons/video-skeleton";
 import CourseContent from "@/components/ui/course-content";
 import VideoIframe from "@/components/ui/video-iframe";
 import { useGetCourseContentByIdQuery } from "@/lib/redux/api";
@@ -21,10 +23,6 @@ const SingleCourse = ({ params }: { params: Promise<{ _id: string }> }) => {
     }
   }, [course]);
 
-  if (isLoading) {
-    return "Loading...";
-  }
-
   return (
     <div className="min-h-screen p-4 sm:px-10 lg:px-20 font-[family-name:var(--font-geist-sans)] relative">
       {/* Page title */}
@@ -35,21 +33,30 @@ const SingleCourse = ({ params }: { params: Promise<{ _id: string }> }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <VideoIframe
-          currVideo={currVideo}
-          modules={course?.modules as ModuleType[]}
-          setCurrVideo={setCurrVideo}
-          courseId={course?._id || ""}
-        />
+        {isLoading ? (
+          <VideoSkeleton />
+        ) : (
+          <VideoIframe
+            currVideo={currVideo}
+            modules={course?.modules as ModuleType[]}
+            setCurrVideo={setCurrVideo}
+            courseId={course?._id || ""}
+            isAdmin
+          />
+        )}
 
         {/* Course Content Area */}
-        <CourseContent
-          modules={course?.modules as ModuleType[]}
-          setCurrVideo={setCurrVideo}
-          courseId={course?._id || ""}
-          mod={currVideo.mod}
-          lec={currVideo.lec}
-        />
+        {isLoading ? (
+          <CourseContentSkeleton />
+        ) : (
+          <CourseContent
+            modules={course?.modules as ModuleType[]}
+            setCurrVideo={setCurrVideo}
+            courseId={course?._id || ""}
+            mod={currVideo.mod}
+            lec={currVideo.lec}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
 "use client";
+import CourseContentSkeleton from "@/components/skeletons/course-content-skeleton";
+import VideoSkeleton from "@/components/skeletons/video-skeleton";
 import CourseContentAdmin from "@/components/ui/course-content-admin";
 import AddUpdateModuleModal from "@/components/ui/modals/add-update-module-modal";
 import UpdateLecturesModal from "@/components/ui/modals/update-lectures-modal";
@@ -30,10 +32,6 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
     }
   }, [course]);
 
-  if (isLoading) {
-    return "Loading...";
-  }
-
   const handleOpenLecModal = ({
     prevLecture,
     moduleId,
@@ -60,7 +58,9 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {course && (
+        {isLoading ? (
+          <VideoSkeleton />
+        ) : (
           <VideoIframe
             currVideo={currVideo}
             modules={course?.modules as ModuleType[]}
@@ -71,13 +71,17 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
         )}
 
         {/* Course Content Area */}
-        <CourseContentAdmin
-          modules={course?.modules as ModuleType[]}
-          handleOpenModuleModal={handleOpenModuleModal}
-          handleOpenLecModal={handleOpenLecModal}
-          courseId={_id}
-          setCurrVideo={setCurrVideo}
-        />
+        {isLoading ? (
+          <CourseContentSkeleton />
+        ) : (
+          <CourseContentAdmin
+            modules={course?.modules as ModuleType[]}
+            handleOpenModuleModal={handleOpenModuleModal}
+            handleOpenLecModal={handleOpenLecModal}
+            courseId={_id}
+            setCurrVideo={setCurrVideo}
+          />
+        )}
       </div>
 
       {/* Modal to Create or Update Module */}

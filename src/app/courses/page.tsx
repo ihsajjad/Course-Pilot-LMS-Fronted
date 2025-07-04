@@ -1,5 +1,6 @@
 "use client";
 
+import CourseCardSkeleton from "@/components/skeletons/course-card-skeleton";
 import CourseCard from "@/components/ui/course-card";
 import CourseQueries from "@/components/ui/course-queries";
 import CoursesPagination from "@/components/ui/courses-pagination";
@@ -13,7 +14,7 @@ const CoursesPage = () => {
     sortByPrice: "price LtoH",
     page: 1,
   });
-  const { data } = useGetCoursesQuery(query);
+  const { data, isLoading } = useGetCoursesQuery(query);
 
   return (
     <div className="min-h-screen p-4 sm:px-10 lg:px-20 font-[family-name:var(--font-geist-sans)] relative">
@@ -27,11 +28,23 @@ const CoursesPage = () => {
       <CourseQueries query={query} setQuery={setQuery} />
 
       {/* Course card container */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data?.courses.map((course) => (
-          <CourseCard key={course._id} course={course} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[0, 1, 2].map((i) => (
+            <CourseCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : data?.courses ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {data?.courses.map((course) => (
+            <CourseCard key={course._id} course={course} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-xl text-neutral-500 dark:text-neutral-400 h-[60vh] flex items-center justify-center italic">
+          No course available
+        </div>
+      )}
 
       {/* pagination */}
       <CoursesPagination

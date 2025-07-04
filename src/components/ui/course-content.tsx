@@ -38,7 +38,7 @@ const CourseContent = ({
   // claclulating course progress
   const totalLectures =
     modules.reduce((acc, module) => acc + module.lectures.length, 0) || 1;
-  const completedLength = completedLectures.length || 1;
+  const completedLength = completedLectures.length;
 
   const progressPercentage = (completedLength / totalLectures) * 100;
 

@@ -52,22 +52,21 @@ const CourseCardAdmin = ({
           <span className="font-medium text-primary">৳ {course.price}</span>
 
           <div className="flex gap-2">
-            <Button
+            <button
               onClick={() => handleDeleteCourse(course._id)}
-              variant={"destructive"}
-              size={"sm"}
+              className="bg-red-500 w-7 h-7 rounded-md flex items-center justify-center text-white"
             >
               {isDeleting ? (
-                <LoaderCircle className="w-6 h-6 animate-spin " />
+                <LoaderCircle className="w-5 h-5 animate-spin " />
               ) : (
-                <Trash2 />
+                <Trash2 size={20} />
               )}
-            </Button>
+            </button>
             <Link
               href={`/dashboard/edit-module/${course._id}`}
               className="border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-2 rounded-md flex items-center justify-center"
             >
-              View Details
+              Edit Modules
             </Link>
             <Button size="sm" onClick={() => updateModal(course)}>
               Edit

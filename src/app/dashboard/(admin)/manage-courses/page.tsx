@@ -1,5 +1,6 @@
 "use client";
 
+import CourseCardSkeleton from "@/components/skeletons/course-card-skeleton";
 import AddUpdateCourseModal from "@/components/ui/add-update-course-modal";
 import { Button } from "@/components/ui/button";
 import CourseCardAdmin from "@/components/ui/course-card-admin";
@@ -18,7 +19,7 @@ const AllCourses = () => {
     page: 1,
   });
   const [courseToUpdate, setCourseToUpdate] = useState<CourseType | null>(null);
-  const { data } = useGetCoursesQuery(query);
+  const { data, isLoading } = useGetCoursesQuery(query);
 
   // opening add course modal
   const handleCloseModal = () => {
@@ -59,7 +60,30 @@ const AllCourses = () => {
       <CourseQueries query={query} setQuery={setQuery} />
 
       {/* Course card container */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[0, 1, 2].map((i) => (
+            <CourseCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : data?.courses ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {data?.courses.map((course) => (
+            <CourseCardAdmin
+              key={course._id}
+              course={course}
+              updateModal={handleOpenUpdateModal}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-xl text-neutral-500 dark:text-neutral-400 h-[60vh] flex items-center justify-center italic">
+          No course available
+        </div>
+      )}
+
+      {/* Course card container */}
+      {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data?.courses.map((course) => (
           <CourseCardAdmin
             key={course._id}
@@ -67,7 +91,7 @@ const AllCourses = () => {
             updateModal={handleOpenUpdateModal}
           />
         ))}
-      </div>
+      </div> */}
 
       {/* pagination */}
       <CoursesPagination
