@@ -60,13 +60,15 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <VideoIframe
-          currVideo={currVideo}
-          modules={course?.modules as ModuleType[]}
-          setCurrVideo={setCurrVideo}
-          courseId={course?._id || ""}
-          isAdmin
-        />
+        {course && (
+          <VideoIframe
+            currVideo={currVideo}
+            modules={course?.modules as ModuleType[]}
+            setCurrVideo={setCurrVideo}
+            courseId={course?._id || ""}
+            isAdmin
+          />
+        )}
 
         {/* Course Content Area */}
         <CourseContentAdmin

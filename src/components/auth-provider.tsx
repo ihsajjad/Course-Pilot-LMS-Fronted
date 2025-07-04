@@ -1,12 +1,12 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
-// import spinAnimation from '@/assets/loading.json';
 
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/redux";
 import { useCurrentUserQuery } from "@/lib/redux/api";
 import { setUser } from "@/lib/redux/features/authSlice";
+import Loading from "./ui/loading";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -47,7 +47,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [dispatch, router, isOnline, user]);
 
-  if (isLoading) return "Loading...";
+  if (isLoading) return <Loading />;
 
   if (showOfflineMessage) {
     return (

@@ -1,14 +1,14 @@
 "use client";
 import {
-    MobileNav,
-    MobileNavHeader,
-    MobileNavMenu,
-    MobileNavToggle,
-    NavbarButton,
-    NavbarLogo,
-    NavBody,
-    NavItems,
-    Navbar as ShadNavbar,
+  MobileNav,
+  MobileNavHeader,
+  MobileNavMenu,
+  MobileNavToggle,
+  NavbarButton,
+  NavbarLogo,
+  NavBody,
+  NavItems,
+  Navbar as ShadNavbar,
 } from "@/components/ui/resizable-navbar";
 import { useAppDispatch, useAppSelector } from "@/lib/redux";
 import { useSignOutUserMutation } from "@/lib/redux/api";
@@ -18,21 +18,21 @@ import Image from "next/image";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import ModeToggle from "../ui/mode-toggle";
+import Link from "next/link";
 
 export function Navbar() {
   const { user } = useAppSelector((state) => state.authSlice);
 
   const dispatch = useAppDispatch();
   const [signOut, { isLoading }] = useSignOutUserMutation();
-  console.log(user);
 
   const navItems = [
     {
@@ -45,10 +45,14 @@ export function Navbar() {
     },
   ];
 
+  const privateLinks = [];
   if (user?.role === "User") {
-    navItems.push({ name: "My Courses", link: "/dashboard/my-courses" });
+    privateLinks.push({ name: "My Courses", link: "/dashboard/my-courses" });
   } else if (user?.role === "Admin") {
-    navItems.push({ name: "Manage Courses", link: "/dashboard/manage-courses" });
+    privateLinks.push({
+      name: "Manage Courses",
+      link: "/dashboard/manage-courses",
+    });
   }
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -92,6 +96,16 @@ export function Navbar() {
                 <DropdownMenuContent side="bottom" align="end" className="w-52">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
+
+                  {privateLinks.map((item) => (
+                    <Link
+                      key={item.link}
+                      href={item.link}
+                      className="cursor-pointer"
+                    >
+                      <DropdownMenuItem className="cursor-pointer">{item.name}</DropdownMenuItem>
+                    </Link>
+                  ))}
                   <DropdownMenuItem className="font-semibold flex-col items-start">
                     Signed as <br />{" "}
                     <p className="-mt-3 font-normal">{user.email}</p>
