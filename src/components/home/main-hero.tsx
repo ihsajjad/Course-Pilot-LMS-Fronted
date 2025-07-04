@@ -1,9 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
-import { Button } from "../ui/button";
 import { Award, Clock, PlayCircle, Star } from "lucide-react";
 import { ReactNode } from "react";
-import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 interface Props {
   categories: {
@@ -67,12 +67,14 @@ export function MainHero({ categories, stats }: Props) {
           transition={{ duration: 0.5, delay: 0.6 }}
           className="relative z-10 mt-8 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <Button
-            className="w-full sm:w-48 px-6 py-6 font-medium transition-all duration-300 hover:-translate-y-0.5"
-            variant="default"
-          >
-            Explore Courses
-          </Button>
+          <Link href={"/courses"}>
+            <Button
+              className="w-full sm:w-48 px-6 py-6 font-medium transition-all duration-300 hover:-translate-y-0.5"
+              variant="default"
+            >
+              Explore Courses
+            </Button>
+          </Link>
           <Button
             className="w-full sm:w-48 px-6 py-6 font-medium transition-all duration-300 hover:-translate-y-0.5"
             variant="outline"
