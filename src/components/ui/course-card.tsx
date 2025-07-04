@@ -13,8 +13,9 @@ const CourseCard = ({ course }: { course: CourseType }) => {
         <Image
           src={course.thumbnail}
           alt={course.title}
-          fill
-          className="object-cover"
+          height={100}
+          width={200}
+          className="w-full h-full object-cover"
         />
       </div>
       <div className="p-4 flex-1 flex flex-col">

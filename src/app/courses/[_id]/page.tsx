@@ -11,9 +11,9 @@ import { notFound } from "next/navigation";
 export default async function CoursePage({
   params,
 }: {
-  params: { _id: string };
+  params: Promise<{ _id: string }>;
 }) {
-  const { _id } = params;
+  const { _id } = await params;
 
   const course = await fetchCoursePageById(_id);
   if (!course) return notFound();

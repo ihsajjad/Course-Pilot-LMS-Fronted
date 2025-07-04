@@ -1,6 +1,3 @@
-import Image from "next/image";
-import React from "react";
-import { Card, CardContent } from "./card";
 import { CourseType } from "@/lib/types";
 import {
   BarChart2,
@@ -8,13 +5,14 @@ import {
   Clock,
   PlayCircle,
   ShieldCheck,
-  ShoppingCart,
   Star,
   User,
 } from "lucide-react";
-import { Badge } from "./badge";
+import Image from "next/image";
+import EnrollBtn from "../single-course/enroll-btn";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
-import { Button } from "./button";
+import { Badge } from "./badge";
+import { Card, CardContent } from "./card";
 
 const SingleCourseHero = ({ course }: { course: CourseType }) => {
   const instructor = {
@@ -87,7 +85,7 @@ const SingleCourseHero = ({ course }: { course: CourseType }) => {
           {/* Instructor */}
           <div className="flex items-center gap-3 mb-6 p-4 bg-muted/30 rounded-lg">
             <Avatar className="w-12 h-12">
-              <AvatarImage src={instructor.avatar} />
+              {/* <AvatarImage src={instructor.avatar} /> */}
               <AvatarFallback>{instructor.name[0]}</AvatarFallback>
             </Avatar>
             <div>
@@ -114,10 +112,7 @@ const SingleCourseHero = ({ course }: { course: CourseType }) => {
                   One-time payment. Lifetime access.
                 </p>
               </div>
-              <Button className="px-8 py-4 text-base font-bold gap-2">
-                <ShoppingCart className="w-5 h-5" />
-                Enroll Now
-              </Button>
+              <EnrollBtn courseId={course?._id} />
             </div>
 
             <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted-foreground">

@@ -93,6 +93,17 @@ export const api = createApi({
       invalidatesTags: ["Courses"],
     }),
 
+    enrollCourse: builder.mutation<ApiResponse & { user: CurrentUser }, string>(
+      {
+        query: (courseId) => ({
+          url: `/courses/enroll`,
+          method: "POST",
+          body: { courseId },
+        }),
+        invalidatesTags: ["CurrentUser"],
+      }
+    ),
+
     createModule: builder.mutation<ApiResponse, CreateModuleBodyType>({
       query: (moduleData) => ({
         url: "/courses/module",
@@ -179,4 +190,5 @@ export const {
   useUpdateLectureMutation,
   useDeleteLectureMutation,
   useUploadPDFMutation,
+  useEnrollCourseMutation
 } = api;
