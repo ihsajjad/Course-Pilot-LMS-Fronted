@@ -2,6 +2,7 @@
   /* <div className="min-h-screen p-4 pb-20 gap-16 sm:p-10 lg:p-20 font-[family-name:var(--font-geist-sans)]"> */
 }
 import Categories from "@/components/home/categories";
+import CTA from "@/components/home/cta";
 // app/page.tsx
 import FeaturedCourses from "@/components/home/featured-courses";
 import { MainHero } from "@/components/home/main-hero";
@@ -56,7 +57,8 @@ export default function Home() {
       {/* Categories Section */}
       <Categories categories={categories} />
 
-     
+      {/* CTA Section */}
+      <CTA />
     </div>
   );
 }
