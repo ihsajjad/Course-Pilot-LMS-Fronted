@@ -64,6 +64,8 @@ const EditModule = ({ params }: { params: Promise<{ _id: string }> }) => {
           currVideo={currVideo}
           modules={course?.modules as ModuleType[]}
           setCurrVideo={setCurrVideo}
+          courseId={course?._id || ""}
+          isAdmin
         />
 
         {/* Course Content Area */}

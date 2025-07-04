@@ -177,7 +177,17 @@ export const api = createApi({
       providesTags: ["Progress"],
     }),
 
-    
+    addCompletedLecture: builder.mutation<
+      ApiResponse,
+      { courseId: string; lectureId: string }
+    >({
+      query: (data) => ({
+        url: "/user/course-progress",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Progress"],
+    }),
   }),
 });
 
@@ -200,4 +210,5 @@ export const {
   useUploadPDFMutation,
   useEnrollCourseMutation,
   useGetCourseProgressQuery,
+  useAddCompletedLectureMutation,
 } = api;

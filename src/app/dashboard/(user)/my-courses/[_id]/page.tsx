@@ -39,6 +39,7 @@ const SingleCourse = ({ params }: { params: Promise<{ _id: string }> }) => {
           currVideo={currVideo}
           modules={course?.modules as ModuleType[]}
           setCurrVideo={setCurrVideo}
+          courseId={course?._id || ""}
         />
 
         {/* Course Content Area */}
