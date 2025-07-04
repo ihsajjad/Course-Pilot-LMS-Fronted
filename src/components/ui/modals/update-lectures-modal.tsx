@@ -63,11 +63,11 @@ const AddUpdateLecturesModal = ({
 
   // resetting existing lecture data to update
   useEffect(() => {
-    if (prevLecture) {
+    if (prevLecture?._id) {
       setLecture(prevLecture);
     } else {
       setLecture(defaultValue);
-      reset();
+      reset({});
     }
   }, [prevLecture?._id]);
 

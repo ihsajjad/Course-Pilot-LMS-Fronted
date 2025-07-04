@@ -67,7 +67,7 @@ const AddUpdateCourseModal = ({
     formData.append("price", data.price.toString());
 
     // for existing course data
-    if (course._id) {
+    if (course?._id) {
       if (data.thumbnail) {
         formData.append("newThumbnail", data.thumbnail[0]);
       } else {
@@ -81,13 +81,14 @@ const AddUpdateCourseModal = ({
     }
 
     let res;
-    if (course._id) {
+    if (course?._id) {
       res = await updateCourse(formData); // to update exesting course
     } else {
       res = await createCourse(formData); // to create new course
     }
 
     if (res.data?.success) {
+      reset({ title: "", description: "", price: 0});
       successToast(res.data?.message);
       handleCloseModal();
     } else {
@@ -192,14 +193,15 @@ const AddUpdateCourseModal = ({
                   type="file"
                   {...register("thumbnail", {
                     validate: (files: FileList) => {
+                      console.log(files);
                       if (files?.length == 0 && !course.thumbnail) {
                         return "Thumbnail is required!";
                       } else if (
                         files?.length &&
-                        files[0]?.size > 1024 * 1024 &&
-                        !course.thumbnail
+                        files[0]?.size > 2 * 1024 * 1024 &&
+                        !course?.thumbnail
                       ) {
-                        return "Maximum file size 1 MB";
+                        return "Maximum file size 2 MB";
                       }
                     },
                   })}
