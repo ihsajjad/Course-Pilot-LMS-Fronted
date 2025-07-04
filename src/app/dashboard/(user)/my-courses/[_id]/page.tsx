@@ -45,6 +45,9 @@ const SingleCourse = ({ params }: { params: Promise<{ _id: string }> }) => {
         <CourseContent
           modules={course?.modules as ModuleType[]}
           setCurrVideo={setCurrVideo}
+          courseId={course?._id || ""}
+          mod={currVideo.mod}
+          lec={currVideo.lec}
         />
       </div>
     </div>

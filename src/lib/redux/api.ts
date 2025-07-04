@@ -6,6 +6,7 @@ import {
   CreateLectureBodyType,
   CreateModuleBodyType,
   CurrentUser,
+  EnrolledCourseType,
   GetCoursesType,
   UpdateLectureBodyType,
   UpdateModuleBodyType,
@@ -23,7 +24,7 @@ export const api = createApi({
     credentials: "include",
   }),
   reducerPath: "api",
-  tagTypes: ["CurrentUser", "Courses", "Course"],
+  tagTypes: ["CurrentUser", "Courses", "Course", "Progress"],
   endpoints: (builder) => ({
     signUp: builder.mutation<ApiResponse & { data: CurrentUser }, FormData>({
       query: (formData) => ({
@@ -170,6 +171,13 @@ export const api = createApi({
         body: formData,
       }),
     }),
+
+    getCourseProgress: builder.query<EnrolledCourseType, string>({
+      query: (courseId) => `/user/course-progress/${courseId}`,
+      providesTags: ["Progress"],
+    }),
+
+    
   }),
 });
 
@@ -190,5 +198,6 @@ export const {
   useUpdateLectureMutation,
   useDeleteLectureMutation,
   useUploadPDFMutation,
-  useEnrollCourseMutation
+  useEnrollCourseMutation,
+  useGetCourseProgressQuery,
 } = api;
