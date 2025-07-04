@@ -2,16 +2,18 @@
 
 import { useAppDispatch, useAppSelector } from "@/lib/redux";
 import { useEnrollCourseMutation } from "@/lib/redux/api";
+import { setUser } from "@/lib/redux/features/authSlice";
 import { errorToast, successToast } from "@/lib/utils";
 import { ArrowRight, LoaderCircle, ShoppingCart } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
-import { setUser } from "@/lib/redux/features/authSlice";
-import { useRouter } from "next/navigation";
 
 const EnrollBtn = ({ courseId }: { courseId: string }) => {
-    const { user } = useAppSelector((state) => state.authSlice);
-    
-    const router = useRouter();
+  const { user } = useAppSelector((state) => state.authSlice);
+
+  const pathname = usePathname();
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const [enrollNow, { isLoading }] = useEnrollCourseMutation();
@@ -30,15 +32,25 @@ const EnrollBtn = ({ courseId }: { courseId: string }) => {
     } else {
       errorToast(res?.data?.message as string);
     }
-    };
-    
-    // redirecting enrolled user to the course content page to consume
-    const handleContinue = ()=> router.push(`/dashboard/my-courses/${courseId}`)
+  };
+
+  // redirecting enrolled user to the course content page to consume
+  const handleContinue = () => router.push(`/dashboard/my-courses/${courseId}`);
+
+  if (!user?._id) {
+    return (
+      <Link href={`/sign-in?callbackUrl=${encodeURIComponent(pathname)}`}>
+        <Button className="px-8 py-4 text-base font-bold gap-2">
+          Sign in to Buy
+        </Button>
+      </Link>
+    );
+  }
 
   return (
     <Button
       disabled={isLoading || user.role === "Admin"}
-      onClick={ isEnrolled ? handleContinue : handleEnroll}
+      onClick={isEnrolled ? handleContinue : handleEnroll}
       className="px-8 py-4 text-base font-bold gap-2"
     >
       {isEnrolled ? (

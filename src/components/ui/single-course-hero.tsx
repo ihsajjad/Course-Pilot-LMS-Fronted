@@ -78,7 +78,7 @@ const SingleCourseHero = ({ course }: { course: CourseType }) => {
             {course.title}
           </h1>
 
-          <p className="text-muted-foreground leading-relaxed mb-6">
+          <p className="text-muted-foreground leading-relaxed mb-6 grow">
             {course.description}
           </p>
 

@@ -1,15 +1,18 @@
 "use client";
-import { cn, errorToast, successToast } from "@/lib/utils";
-import React, { useState } from "react";
+import { useAppDispatch } from "@/lib/redux";
+import { useSignInMutation } from "@/lib/redux/api";
+import { setUser } from "@/lib/redux/features/authSlice";
+import { errorToast, successToast } from "@/lib/utils";
+import { LoaderCircle } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import InputError from "./input-error";
-import { useSignInMutation } from "@/lib/redux/api";
+import BottomGradient from "./bottom-gradient";
 import { Button } from "./button";
-import { LoaderCircle } from "lucide-react";
-import { useAppDispatch } from "@/lib/redux";
-import { setUser } from "@/lib/redux/features/authSlice";
+import InputError from "./input-error";
+import LabelInputContainer from "./label-input-container";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export interface SignInFormType {
   email: string;
@@ -24,6 +27,11 @@ export function SignInForm() {
   } = useForm<SignInFormType>();
   const [globalError, setGlobalError] = useState<string>("");
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
+  
   const dispatch = useAppDispatch();
   const [signIn, { isLoading }] = useSignInMutation();
 
@@ -33,6 +41,8 @@ export function SignInForm() {
     if (res.data?.success) {
       // setting the corrent user after sign in
       dispatch(setUser({ user: res.data.data, isLoading }));
+      router.push(callbackUrl);
+
       successToast(res.data?.message);
     } else {
       errorToast(res?.data?.message as string);
@@ -112,26 +122,3 @@ export function SignInForm() {
     </div>
   );
 }
-
-const BottomGradient = () => {
-  return (
-    <>
-      <span className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
-      <span className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
-    </>
-  );
-};
-
-const LabelInputContainer = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => {
-  return (
-    <div className={cn("flex w-full flex-col space-y-2", className)}>
-      {children}
-    </div>
-  );
-};

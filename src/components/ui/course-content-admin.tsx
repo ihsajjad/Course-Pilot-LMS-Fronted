@@ -171,7 +171,7 @@ const CourseContentAdmin = ({
                       })
                     }
                     className="gap-2 flex-1"
-                    variant="secondary"
+                    variant="default"
                     size="sm"
                   >
                     <Plus className="w-4 h-4" />
@@ -180,7 +180,7 @@ const CourseContentAdmin = ({
                   <Button
                     onClick={() => handleOpenModuleModal(module)}
                     className="gap-2 flex-1"
-                    variant="secondary"
+                    variant="default"
                     size="sm"
                   >
                     <Edit className="w-4 h-4" />
