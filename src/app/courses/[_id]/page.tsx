@@ -20,7 +20,7 @@ export default async function CoursePage({
 
   return (
     <div className="min-h-screen p-4 sm:px-10 lg:px-20 font-[family-name:var(--font-geist-sans)] bg-gradient-to-b from-background/50 to-muted/20">
-      <div className="max-w-7xl mx-auto py-8 md:py-16 space-y-16">
+      <div className="pb-4 pt-0 md:pt-4 space-y-16">
         {/* Course Card */}
         <SingleCourseHero course={course} />
 

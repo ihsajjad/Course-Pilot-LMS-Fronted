@@ -26,7 +26,7 @@ const SingleCourseHero = ({ course }: { course: CourseType }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
         {/* Thumbnail Section */}
         <div className="relative group">
-          <div className="aspect-video bg-gradient-to-tr from-primary/20 to-secondary/20 w-full h-full flex items-center justify-center">
+          <div className=" bg-gradient-to-tr from-primary/20 to-secondary/20 w-full h-full flex items-center justify-center rounded-md">
             {/* Thumbnail Image */}
             <Image
               src={course.thumbnail} // Replace with actual dynamic image URL
