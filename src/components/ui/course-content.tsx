@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./accordion";
+import CourseProgress from "./course-progress";
 import { Input } from "./input";
 
 interface CourseContentProps {
@@ -31,13 +32,22 @@ const CourseContent = ({
 
   const completedLectures = data?.completedLectures || [];
 
+  // claclulating course progress
+  const totalLectures =
+    modules.reduce((acc, module) => acc + module.lectures.length, 0) || 1;
+  const completedLength = completedLectures.length || 1;
+
+  const progressPercentage = (completedLength / totalLectures) * 100;
+
   // Playing video link
   const videoUrl = modules[mod]?.lectures[lec]?.videoUrl || "";
   return (
     <div className="col-span-1 border rounded-xl p-3 h-fit sticky top-14">
-      <h4 className="text-lg font-medium text-neutral-600 dark:text-neutral-300">
+      <CourseProgress progressPercentage={progressPercentage} />
+      <h4 className="text-lg font-medium text-neutral-600 dark:text-neutral-300 mt-2">
         Course Content
       </h4>
+
       <Input
         type="text"
         placeholder="Search by title or description"

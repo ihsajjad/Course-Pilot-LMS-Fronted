@@ -73,7 +73,8 @@ const VideoIframe = ({
   };
 
   // getting the total lectures to gues the finished or not
-  const totalLectures = modules.flatMap((module) => module.lectures).length;
+  const totalLectures =
+    modules.reduce((acc, module) => acc + module.lectures.length, 0) || 1;
   const isFinished = totalLectures === completedLectures.length;
 
   return (
