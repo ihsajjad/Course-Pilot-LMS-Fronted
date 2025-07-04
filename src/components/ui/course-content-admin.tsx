@@ -5,8 +5,8 @@ import {
   useDeleteModuleMutation,
 } from "@/lib/redux/api";
 import { LectureType, ModuleType } from "@/lib/types";
-import { errorToast, successToast } from "@/lib/utils";
-import { Edit, LoaderCircle, Plus, Trash2 } from "lucide-react";
+import { errorToast, filterModuleOrLecture, successToast } from "@/lib/utils";
+import { Edit, LoaderCircle, Plus, Search, Trash2 } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
   Accordion,
@@ -35,6 +35,7 @@ const CourseContentAdmin = ({
   courseId,
   setCurrVideo,
 }: CourseContentProps) => {
+  const [searchTerm, setSearchTerm] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const [deleteModule, { isLoading: isDeletingModule }] =
@@ -68,25 +69,36 @@ const CourseContentAdmin = ({
     }
   };
 
+  const filteredModules = filterModuleOrLecture(modules, searchTerm);
+
   return (
     <div className="col-span-1 border rounded-xl p-3 h-fit sticky top-14">
       <h4 className="text-lg font-medium text-neutral-600 dark:text-neutral-300">
         Course Content
       </h4>
-      <Input
-        type="text"
-        placeholder="Search by title or description"
-        className=""
-      />
+
+      {/* Search area */}
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
+          <Search className="w-5 h-5" />
+        </div>
+        <Input
+          type="text"
+          placeholder="Search by module or lecture title"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+          className="pl-10"
+        />
+      </div>
 
       <Accordion
         type="single"
         collapsible
         className="w-full space-y-4 mt-3"
-        defaultValue={modules[0]?._id}
+        defaultValue={filteredModules[0]?._id}
       >
-        {modules &&
-          modules.map((module, i) => (
+        {filteredModules &&
+          filteredModules.map((module, i) => (
             <AccordionItem
               key={module._id}
               value={module._id}

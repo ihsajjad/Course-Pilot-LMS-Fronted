@@ -2,8 +2,8 @@
 
 import { useGetCourseProgressQuery } from "@/lib/redux/api";
 import { ModuleType } from "@/lib/types";
-import { CheckCircle2, Lock, PlayCircle } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
+import { CheckCircle2, Lock, PlayCircle, Search } from "lucide-react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -12,6 +12,7 @@ import {
 } from "./accordion";
 import CourseProgress from "./course-progress";
 import { Input } from "./input";
+import { filterModuleOrLecture } from "@/lib/utils";
 
 interface CourseContentProps {
   modules: ModuleType[];
@@ -28,6 +29,8 @@ const CourseContent = ({
   lec,
   courseId,
 }: CourseContentProps) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
   const { data } = useGetCourseProgressQuery(courseId);
 
   const completedLectures = data?.completedLectures || [];
@@ -41,6 +44,9 @@ const CourseContent = ({
 
   // Playing video link
   const videoUrl = modules[mod]?.lectures[lec]?.videoUrl || "";
+
+  const filteredModules = filterModuleOrLecture(modules, searchTerm);
+
   return (
     <div className="col-span-1 border rounded-xl p-3 h-fit sticky top-14">
       <CourseProgress progressPercentage={progressPercentage} />
@@ -48,20 +54,28 @@ const CourseContent = ({
         Course Content
       </h4>
 
-      <Input
-        type="text"
-        placeholder="Search by title or description"
-        className=""
-      />
+      {/* Search area */}
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
+          <Search className="w-5 h-5" />
+        </div>
+        <Input
+          type="text"
+          placeholder="Search by module or lecture title"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+          className="pl-10"
+        />
+      </div>
 
       <Accordion
         type="single"
         collapsible
         className="w-full space-y-4 mt-3"
-        defaultValue={modules[0]?._id}
+        defaultValue={filteredModules[0]?._id}
       >
-        {modules &&
-          modules.map((module, i) => (
+        {filteredModules &&
+          filteredModules.map((module, i) => (
             <AccordionItem
               key={module._id}
               value={module._id}
