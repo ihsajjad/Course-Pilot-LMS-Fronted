@@ -1,6 +1,7 @@
 {
   /* <div className="min-h-screen p-4 pb-20 gap-16 sm:p-10 lg:p-20 font-[family-name:var(--font-geist-sans)]"> */
 }
+import Categories from "@/components/home/categories";
 // app/page.tsx
 import FeaturedCourses from "@/components/home/featured-courses";
 import { MainHero } from "@/components/home/main-hero";
@@ -11,7 +12,7 @@ import {
   BookOpen,
   PlayCircle,
   ShieldCheck,
-  Users
+  Users,
 } from "lucide-react";
 
 export default function Home() {
@@ -52,7 +53,10 @@ export default function Home() {
       {/* Featured Courses */}
       <FeaturedCourses />
 
-      
+      {/* Categories Section */}
+      <Categories categories={categories} />
+
+     
     </div>
   );
 }
