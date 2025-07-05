@@ -29,9 +29,8 @@ export function SignInForm() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  let callbackUrl = searchParams.get("callbackUrl");
 
-  
   const dispatch = useAppDispatch();
   const [signIn, { isLoading }] = useSignInMutation();
 
@@ -41,7 +40,14 @@ export function SignInForm() {
     if (res.data?.success) {
       // setting the corrent user after sign in
       dispatch(setUser({ user: res.data.data, isLoading }));
-      router.push(callbackUrl);
+
+      // redirecting user
+      if (!callbackUrl && res.data.data.role === "Admin")
+        callbackUrl = "/dashboard/manage-courses";
+      else if (!callbackUrl && res.data.data.role === "User")
+        callbackUrl = "/dashboard/my-courses";
+
+      if (callbackUrl) router.push(callbackUrl);
 
       successToast(res.data?.message);
     } else {

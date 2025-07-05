@@ -82,17 +82,6 @@ const AllCourses = () => {
         </div>
       )}
 
-      {/* Course card container */}
-      {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data?.courses.map((course) => (
-          <CourseCardAdmin
-            key={course._id}
-            course={course}
-            updateModal={handleOpenUpdateModal}
-          />
-        ))}
-      </div> */}
-
       {/* pagination */}
       <CoursesPagination
         page={query.page}

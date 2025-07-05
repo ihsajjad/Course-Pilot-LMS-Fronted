@@ -172,6 +172,7 @@ export const api = createApi({
       }),
     }),
 
+    // ================================ User Apis ==============================
     getCourseProgress: builder.query<EnrolledCourseType, string>({
       query: (courseId) => `/user/course-progress/${courseId}`,
       providesTags: ["Progress"],
@@ -187,6 +188,10 @@ export const api = createApi({
         body: data,
       }),
       invalidatesTags: ["Progress"],
+    }),
+
+    getMyCourses: builder.query<CourseType[], void>({
+      query: () => `/user/my-courses`,
     }),
   }),
 });
@@ -211,4 +216,5 @@ export const {
   useEnrollCourseMutation,
   useGetCourseProgressQuery,
   useAddCompletedLectureMutation,
+  useGetMyCoursesQuery
 } = api;
