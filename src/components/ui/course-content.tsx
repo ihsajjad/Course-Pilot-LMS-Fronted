@@ -2,6 +2,7 @@
 
 import { useGetCourseProgressQuery } from "@/lib/redux/api";
 import { ModuleType } from "@/lib/types";
+import { filterModuleOrLecture } from "@/lib/utils";
 import { CheckCircle2, Lock, PlayCircle, Search } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
@@ -12,7 +13,7 @@ import {
 } from "./accordion";
 import CourseProgress from "./course-progress";
 import { Input } from "./input";
-import { filterModuleOrLecture } from "@/lib/utils";
+import LectureResources from "./lecture-resources";
 
 interface CourseContentProps {
   modules: ModuleType[];
@@ -90,34 +91,42 @@ const CourseContent = ({
                   module.lectures.map((lecture, idx) => {
                     // cheking is the lecture completed before
                     const isLocked = !completedLectures.includes(lecture._id);
-
+                    const isPlaying = videoUrl === lecture.videoUrl;
                     return (
-                      <button
+                      <div
                         key={lecture._id}
-                        onClick={() => setCurrVideo({ mod: i, lec: idx })}
-                        disabled={isLocked}
-                        className={`flex gap-1 justify-start w-full group p-1 md:p-2 md:px-3 text-sm md:text-base rounded-md hover:bg-muted transition-colors border border-transparent hover:border-border relative ${
-                          isLocked ? "cursor-default" : "cursor-pointer"
-                        }`}
+                        className={`group p-1 md:p-2 md:px-3 text-sm md:text-base rounded-md hover:bg-muted transition-colors border  hover:border-border relativ ${isPlaying ? "border-border bg-muted": "border-transparent"}`}
                       >
-                        {videoUrl === lecture.videoUrl ? (
-                          <span className="w-fit h-fit flex items-center gap-1 font-medium text-primary whitespace-nowrap">
-                            <PlayCircle className="w-4 h-4 flex-shrink-0" />
-                            <span>{`Lecture ${idx + 1}:`}</span>
-                          </span>
-                        ) : isLocked ? (
-                          <span className="w-fit h-fit flex items-center gap-1 font-medium text-muted-foreground whitespace-nowrap">
-                            <Lock className="w-4 h-4 flex-shrink-0" />
-                            <span>{`Lecture ${idx + 1}:`}</span>
-                          </span>
-                        ) : (
-                          <span className="w-fit h-fit flex items-center gap-1 font-medium text-green-500 whitespace-nowrap">
-                            <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-                            <span>{`Lecture ${idx + 1}:`}</span>
-                          </span>
+                        <button
+                          onClick={() => setCurrVideo({ mod: i, lec: idx })}
+                          disabled={isLocked}
+                          className={`flex gap-1 justify-start w-full e ${
+                            isLocked ? "cursor-default" : "cursor-pointer"
+                          }`}
+                        >
+                          {isPlaying ? (
+                            <span className="w-fit h-fit flex items-center gap-1 font-medium text-primary whitespace-nowrap">
+                              <PlayCircle className="w-4 h-4 flex-shrink-0" />
+                              <span>{`Lecture ${idx + 1}:`}</span>
+                            </span>
+                          ) : isLocked ? (
+                            <span className="w-fit h-fit flex items-center gap-1 font-medium text-muted-foreground whitespace-nowrap">
+                              <Lock className="w-4 h-4 flex-shrink-0" />
+                              <span>{`Lecture ${idx + 1}:`}</span>
+                            </span>
+                          ) : (
+                            <span className="w-fit h-fit flex items-center gap-1 font-medium text-green-500 whitespace-nowrap">
+                              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+                              <span>{`Lecture ${idx + 1}:`}</span>
+                            </span>
+                          )}
+                          <p className="grow text-left">{lecture.title}</p>
+                        </button>
+                        {/* Lecture resrouces */}
+                        {lecture?.resources?.length > 0 && (
+                          <LectureResources resources={lecture.resources} />
                         )}
-                        <p className="grow text-left">{lecture.title}</p>
-                      </button>
+                      </div>
                     );
                   })
                 ) : (
