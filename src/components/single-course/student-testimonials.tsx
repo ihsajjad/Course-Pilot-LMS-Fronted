@@ -59,7 +59,7 @@ const StudentTestimonials = () => {
                   />
                 ))}
               </div>
-              <p className="italic mb-6">"{testimonial.comment}"</p>
+              <p className="italic mb-6">{testimonial.comment}</p>
               <div>
                 <p className="font-medium">{testimonial.name}</p>
                 <p className="text-muted-foreground text-sm">

@@ -116,7 +116,7 @@ export function SignInForm() {
 
         {/* Footer Text */}
         <p className="text-center text-sm text-muted-foreground mt-3">
-          Don't have any account?{" "}
+          Don&apos;t have any account?{" "}
           <a
             href="/sign-up"
             className="text-primary font-medium hover:underline underline-offset-4 transition"

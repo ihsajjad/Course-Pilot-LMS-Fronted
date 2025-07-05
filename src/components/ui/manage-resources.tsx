@@ -1,12 +1,11 @@
 "use client";
 
-import { LectureType } from "@/lib/types";
-import { Edit, X } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
-import { useForm } from "react-hook-form";
-import { FileUpload } from "./file-upload";
 import { useUploadPDFMutation } from "@/lib/redux/api";
+import { LectureType } from "@/lib/types";
 import { errorToast, successToast } from "@/lib/utils";
+import { X } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
+import { FileUpload } from "./file-upload";
 
 interface ManageResourcesProps {
   resources: string[];
@@ -52,7 +51,7 @@ const ManageResources = ({
       {/* Resources */}
       <div className="space-y-2">
         {resources?.length > 0 ? (
-          resources.map((resource, i) => (
+          resources.map((resource) => (
             <div
               key={resource}
               className="px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-md relative break-words"

@@ -32,20 +32,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    let unsubscribe = () => {};
-
     if (isOnline && user) {
       dispatch(setUser({ user, isLoading }));
     }
 
     return () => {
-      if (isOnline) {
-        unsubscribe();
-      }
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
-  }, [dispatch, router, isOnline, user]);
+  }, [dispatch, router, isOnline, user, isLoading]);
 
   if (isLoading) return <Loading />;
 

@@ -38,10 +38,8 @@ const CourseContentAdmin = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const [deleteModule, { isLoading: isDeletingModule }] =
-    useDeleteModuleMutation();
-  const [deleteLecture, { isLoading: isDeletingLecture }] =
-    useDeleteLectureMutation();
+  const [deleteModule] = useDeleteModuleMutation();
+  const [deleteLecture] = useDeleteLectureMutation();
 
   // To delete module based on id
   const handleDeleteModule = async (courseId: string, moduleId: string) => {

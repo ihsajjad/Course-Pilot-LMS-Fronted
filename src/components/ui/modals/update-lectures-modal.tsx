@@ -69,7 +69,7 @@ const AddUpdateLecturesModal = ({
       setLecture(defaultValue);
       reset({});
     }
-  }, [prevLecture?._id]);
+  }, [prevLecture, reset]);
 
   const onSubmit = handleSubmit((data: LectureFormType) => {
     setLecture((p) => ({ ...p, ...data }));

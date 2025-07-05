@@ -48,14 +48,16 @@ const AddUpdateCourseModal = ({
 
   // Reseting the course data to update
   useEffect(() => {
-    course
-      ? reset({
-          title: course.title,
-          description: course.description,
-          price: course.price,
-        })
-      : reset({ title: "", description: "", price: 0 });
-  }, [course?._id]);
+    if (course) {
+      reset({
+        title: course.title,
+        description: course.description,
+        price: course.price,
+      });
+    } else {
+      reset({ title: "", description: "", price: 0 });
+    }
+  }, [course, reset]);
 
   const onSubmit = handleSubmit(async (data: CourseFormType) => {
     setGlobalError("");
@@ -88,7 +90,7 @@ const AddUpdateCourseModal = ({
     }
 
     if (res.data?.success) {
-      reset({ title: "", description: "", price: 0});
+      reset({ title: "", description: "", price: 0 });
       successToast(res.data?.message);
       handleCloseModal();
     } else {

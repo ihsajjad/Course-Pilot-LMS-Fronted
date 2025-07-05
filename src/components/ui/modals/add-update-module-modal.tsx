@@ -50,7 +50,7 @@ const AddUpdateModuleModal = ({
     if (prevModule?._id) {
       reset(prevModule);
     } else reset({ title: "" });
-  }, [prevModule?._id]);
+  }, [prevModule, reset]);
 
   const onSubmit = handleSubmit(async (data: ModuleFormType) => {
     const moduleId = prevModule?._id;

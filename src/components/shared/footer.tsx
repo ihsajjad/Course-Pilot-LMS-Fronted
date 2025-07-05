@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-card border-t border-border">
@@ -5,9 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Branding */}
           <div>
-            <h2 className="text-xl font-semibold text-primary">
-              Course Pilot
-            </h2>
+            <h2 className="text-xl font-semibold text-primary">Course Pilot</h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Empowering students and instructors with a smooth, modern learning
               experience.
@@ -21,36 +21,36 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a
+                <Link
                   href="/about"
                   className="hover:text-primary hover:underline transition"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/courses"
                   className="hover:text-primary hover:underline transition"
                 >
                   Courses
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/contact"
                   className="hover:text-primary hover:underline transition"
                 >
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/privacy"
                   className="hover:text-primary hover:underline transition"
                 >
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -80,8 +80,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 border-t border-border pt-6 text-sm text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Course Pilot. All rights
-          reserved.
+          &copy; {new Date().getFullYear()} Course Pilot. All rights reserved.
         </div>
       </div>
     </footer>

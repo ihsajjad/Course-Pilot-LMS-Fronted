@@ -31,7 +31,7 @@ const MyCoursesPage = () => {
         </div>
       ) : (
         <div className="text-center text-xl text-neutral-500 dark:text-neutral-400 h-[60vh] flex flex-col items-center justify-center italic">
-          You haven't been enrolled any course yet. <br />
+          You haven&apos;t been enrolled any course yet. <br />
           <Link href="/courses" className="text-primary not-italic underline">Enroll Courses</Link>
         </div>
       )}

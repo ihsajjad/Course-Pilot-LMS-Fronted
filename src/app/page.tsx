@@ -6,7 +6,6 @@ import CTA from "@/components/home/cta";
 // app/page.tsx
 import FeaturedCourses from "@/components/home/featured-courses";
 import { MainHero } from "@/components/home/main-hero";
-import { Button } from "@/components/ui/button";
 import {
   Award,
   BarChart,

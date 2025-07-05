@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import EnrollBtn from "../single-course/enroll-btn";
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { Avatar, AvatarFallback } from "./avatar";
 import { Badge } from "./badge";
 import { Card, CardContent } from "./card";
 
