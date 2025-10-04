@@ -57,7 +57,7 @@ export function SignInForm() {
   });
 
   return (
-    <div className="max-w-md rounded-xl border border-border bg-card/80 backdrop-blur-md p-6 shadow-md">
+    <div className="max-w-md rounded-xl border border-border bg-card/30 backdrop-blur-xl p-6 shadow-md relative">
       <h2 className="text-2xl font-bold text-foreground-400">
         Sign in to your account
       </h2>
@@ -118,7 +118,7 @@ export function SignInForm() {
         <p className="text-center text-sm text-muted-foreground mt-3">
           Don&apos;t have any account?{" "}
           <a
-            href="/sign-up"
+            href="/app/sign-up"
             className="text-primary font-medium hover:underline underline-offset-4 transition"
           >
             Sign up

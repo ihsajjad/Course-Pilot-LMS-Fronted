@@ -28,7 +28,7 @@ const CourseCard = ({ course }: { course: CourseType }) => {
         <div className="mt-auto flex items-center justify-between">
           <span className="font-medium text-primary">৳ {course.price}</span>
 
-          <Link href={`/courses/${course._id}`}>
+          <Link href={`/app/courses/${course._id}`}>
             <Button variant={"default"}>View Details</Button>
           </Link>
         </div>

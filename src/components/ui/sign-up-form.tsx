@@ -57,7 +57,7 @@ export function SignupForm() {
   const currentPass = watch("password");
 
   return (
-    <div className="max-w-md rounded-xl border border-border bg-card/80 backdrop-blur-md p-6 shadow-md">
+    <div className="max-w-md rounded-xl border border-border bg-card/40 backdrop-blur-md p-6 shadow-md">
       <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-200">
         Create an Account
       </h2>
@@ -165,7 +165,7 @@ export function SignupForm() {
         <p className="text-center text-sm text-muted-foreground mt-3">
           Already have an account?{" "}
           <a
-            href="/sign-in"
+            href="/app/sign-in"
             className="text-primary font-medium hover:underline underline-offset-4 transition"
           >
             Sign in

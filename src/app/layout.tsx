@@ -1,8 +1,6 @@
-import AuthProvider from "@/components/auth-provider";
 import Footer from "@/components/shared/footer";
 import { Navbar } from "@/components/shared/navbar";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import StoreProvider from "@/lib/redux";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -28,22 +26,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased relative h-full max-w-7xl mx-auto`}
       >
-        <StoreProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Navbar />
-            <AuthProvider>{children}</AuthProvider>
-            <Footer />
-          </ThemeProvider>
-        </StoreProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Navbar />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

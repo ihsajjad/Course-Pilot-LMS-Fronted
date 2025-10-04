@@ -10,10 +10,6 @@ import {
   NavItems,
   Navbar as ShadNavbar,
 } from "@/components/ui/resizable-navbar";
-import { useAppDispatch, useAppSelector } from "@/lib/redux";
-import { useSignOutUserMutation } from "@/lib/redux/api";
-import { clearUser } from "@/lib/redux/features/authSlice";
-import { errorToast, successToast } from "@/lib/utils";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -27,12 +23,25 @@ import {
 } from "../ui/dropdown-menu";
 import ModeToggle from "../ui/mode-toggle";
 import Link from "next/link";
+import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 
 export function Navbar() {
-  const { user } = useAppSelector((state) => state.authSlice);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { user } = useGetCurrentUser(setIsLoading);
 
-  const dispatch = useAppDispatch();
-  const [signOut, { isLoading }] = useSignOutUserMutation();
+  const handleSignOut = async () => {
+    setIsLoading(true);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`,
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
+
+    const data = await res.json();
+    console.log(data);
+  };
 
   const navItems = [
     {
@@ -41,7 +50,7 @@ export function Navbar() {
     },
     {
       name: "Courses",
-      link: "/courses",
+      link: "/app/courses",
     },
   ];
 
@@ -57,16 +66,6 @@ export function Navbar() {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleSignOut = async () => {
-    const res = await signOut();
-    if (res?.data?.success) {
-      dispatch(clearUser());
-      successToast(res.data.message);
-    } else {
-      errorToast("Something went wrong!");
-    }
-  };
-
   return (
     <div className="sticky top-0 z-50 w-full">
       <ShadNavbar>
@@ -77,7 +76,7 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             <ModeToggle />
 
-            {user.email ? (
+            {user && user.email ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
@@ -103,7 +102,9 @@ export function Navbar() {
                       href={item.link}
                       className="cursor-pointer"
                     >
-                      <DropdownMenuItem className="cursor-pointer">{item.name}</DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
+                        {item.name}
+                      </DropdownMenuItem>
                     </Link>
                   ))}
                   <DropdownMenuItem className="font-semibold flex-col items-start">
@@ -123,7 +124,7 @@ export function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <NavbarButton variant="secondary" href="/sign-in">
+              <NavbarButton variant="secondary" href="/app/sign-in">
                 Sign in
               </NavbarButton>
             )}
@@ -158,7 +159,7 @@ export function Navbar() {
               </a>
             ))}
             <div className="flex w-full flex-col gap-4">
-              {user.email ? (
+              {user && user.email ? (
                 <>
                   <div className="flex items-center gap-2">
                     <Image
